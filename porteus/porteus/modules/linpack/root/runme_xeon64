@@ -1,0 +1,10 @@
+#!/bin/sh
+
+export KMP_AFFINITY=nowarnings,compact,1,0,granularity=fine
+
+{
+  date
+  xlinpack_xeon64 lininput_xeon64
+  echo -n "Done: "
+  date
+} | tee lin_xeon64.txt

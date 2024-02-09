@@ -1,0 +1,34 @@
+name: Create release
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version of the StresKit ISO to build (e.g. 1.0.0). This will be used for the file, tag and release name."
+        required: true
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install mkisofs
+        run: sudo apt-get install -y mkisofs
+
+      - name: Build ISO
+        run: |
+          if ! bash "./build.sh" "${{ inputs.version }}"; then
+              echo "error: build.sh exited with non-zero exit code"
+              exit 1
+          fi
+
+      - name: Create Release
+        uses: notpeelz/action-gh-create-release@v5.0.1
+        with:
+          strategy: fail-fast
+          tag: ${{ inputs.version }}
+          title: StresKit v${{ inputs.version }}
+          files: |
+            StresKit-v${{ inputs.version }}-x86_64.iso
