@@ -62,7 +62,7 @@ main() {
     rm "./extracted_iso/porteus/base/002-xtra.xzm"
     rm "./extracted_iso/porteus/base/003-openbox.xzm"
 
-    # Setup Linpack
+    # setup Linpack
     linpack_binary="./porteus/porteus/rootcopy/usr/bin"
 
     if ! bash "./setup_linpack.sh" $linpack_binary; then
