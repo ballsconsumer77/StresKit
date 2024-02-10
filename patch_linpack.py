@@ -7,7 +7,11 @@ def main():
         byte_array = file.read()
 
     hex_string = byte_array.hex()
-    matches = re.findall("e8f230", hex_string)
+    matches = [
+        (match.start(), match.group())
+        for match in re.finditer("e8f230", hex_string)
+        if match.start() % 2 == 0
+    ]
 
     if len(matches) != 1:
         return 1
