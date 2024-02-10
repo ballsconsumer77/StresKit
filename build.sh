@@ -63,15 +63,15 @@ main() {
     rm "./extracted_iso/porteus/base/003-openbox.xzm"
 
     # setup Linpack
-    linpack_binary="./porteus/porteus/rootcopy/usr/bin"
+    bin_path="./porteus/porteus/rootcopy/usr/bin"
 
-    if ! bash "./setup_linpack.sh" $linpack_binary; then
+    if ! bash "./setup_linpack.sh" $bin_path; then
         echo "error: failed to setup linpack"
         return 1
     fi
 
     # patch linpack binary for AMD
-    if ! python3 "./patch_linpack.py" "$linpack_binary/xlinpack_xeon64"; then
+    if ! python3 "./patch_linpack.py" "$bin_path/xlinpack_xeon64"; then
         echo "error: failed to patch binary"
         return 1
     fi
