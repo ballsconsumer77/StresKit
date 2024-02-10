@@ -30,3 +30,4 @@ jobs:
           artifacts: StresKit-v${{ inputs.version }}-x86_64.iso
           name: StresKit v${{ inputs.version }}
           tag: ${{ inputs.version }}
+          generateReleaseNotes: true
