@@ -69,11 +69,11 @@ main() {
     7z x ./linpack.tar -o"./linpack"
 
     # version name changes in folder name
-    benchmarks_folder_name=$(find "./linpack" -maxdepth 1 -type d -name "*benchmarks*" -print -quit)
+    benchmarks_folder=$(find "./linpack" -maxdepth 1 -type d -name "*benchmarks*" -print -quit)
 
     # create linpack/usr/bin and copy official binary there as module will be packed later
     mkdir -p "./porteus/porteus/modules/linpack/usr/bin"
-    cp "$benchmarks_folder_name/linux/share/mkl/benchmarks/linpack/xlinpack_xeon64" "./porteus/porteus/modules/linpack/usr/bin"
+    cp "$benchmarks_folder/linux/share/mkl/benchmarks/linpack/xlinpack_xeon64" "./porteus/porteus/modules/linpack/usr/bin"
 
     # patch binary for AMD
     if ! python3 "./patch_linpack.py" "./porteus/porteus/modules/linpack/usr/bin/xlinpack_xeon64"; then
