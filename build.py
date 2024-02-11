@@ -145,21 +145,23 @@ def main() -> int:
         return 1
 
     # extract ISO
-    process = subprocess.run(["7z", "x", file_name, "-oextracted_iso"], check=False)
+    process = subprocess.run(
+        [
+            "7z",
+            "x",
+            file_name,
+            "-oextracted_iso",
+            # don't extract unnecessary modules
+            "-x!porteus/base/002-xorg.xzm",
+            "-x!porteus/base/002-xtra.xzm",
+            "-x!porteus/base/003-openbox.xzm",
+        ],
+        check=False,
+    )
 
     if process.returncode != 0:
         print(f"error: failed to extract {file_name}")
         return 1
-
-    # delete unnecessary modules
-    files_to_remove = [
-        "extracted_iso/porteus/base/002-xorg.xzm",
-        "extracted_iso/porteus/base/002-xtra.xzm",
-        "extracted_iso/porteus/base/003-openbox.xzm",
-    ]
-
-    for file in files_to_remove:
-        os.remove(file)
 
     # setup linpack
     if setup_linpack("porteus/porteus/rootcopy/usr/bin") != 0:
