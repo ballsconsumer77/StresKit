@@ -5,6 +5,7 @@ import re
 import shutil
 import subprocess
 import sys
+from glob import glob
 
 import requests
 
@@ -30,6 +31,51 @@ def calculate_sha256(file_path: str) -> str:
             sha256_hash.update(byte_block)
 
     return sha256_hash.hexdigest()
+
+
+def setup_linpack(binary_destination: str) -> int:
+    # download linpack package
+    linpack_url = (
+        "https://downloadmirror.intel.com/793598/l_onemklbench_p_2024.0.0_49515.tgz"
+    )
+    file_name = "linpack.tgz"
+
+    response = requests.get(linpack_url, timeout=5)
+
+    if response.status_code != 200:
+        print(f"error: {file_name} download error, status_code {response.status_code}")
+        return 1
+
+    with open(file_name, "wb") as file:
+        file.write(response.content)
+
+    process = subprocess.run(["7z", "x", "linpack.tgz"], check=False)
+
+    if process.returncode != 0:
+        print(f"error: failed to extract {file_name}")
+        return 1
+
+    # extract inner file to linpack folder
+    process = subprocess.run(["7z", "x", "linpack.tar", "-olinpack"], check=False)
+
+    if process.returncode != 0:
+        print("error: failed to extract linpack.tar")
+        return 1
+
+    # version name changes in folder name (e.g. "benchmarks_2024.0")
+    benchmarks_folder = glob("linpack/benchmarks*")
+
+    if len(benchmarks_folder) != 1:
+        print("error: unable to find correct benchmarks folder")
+        return 1
+
+    # copy official binary there as module will be packed later
+    shutil.copy(
+        f"{benchmarks_folder[0]}/linux/share/mkl/benchmarks/linpack/xlinpack_xeon64",
+        binary_destination,
+    )
+
+    return 0
 
 
 def patch_linpack(bin_path: str):
@@ -81,7 +127,7 @@ def main() -> int:
     response = requests.get(f"{src}/{file_name}", timeout=5)
 
     if response.status_code != 200:
-        print(f"error: download error, status_code {response.status_code}")
+        print(f"error: {file_name} download error, status_code {response.status_code}")
         return 1
 
     with open(file_name, "wb") as file:
@@ -116,9 +162,9 @@ def main() -> int:
         os.remove(file)
 
     # setup linpack
-    process = subprocess.run(
-        ["bash", "setup_linpack.sh", "porteus/porteus/rootcopy/usr/bin"], check=False
-    )
+    if setup_linpack("porteus/porteus/rootcopy/usr/bin") != 0:
+        print("error: failed to setup linpack")
+        return 1
 
     if process.returncode != 0:
         print("error: failed to setup linpack")
@@ -135,7 +181,7 @@ def main() -> int:
     process = subprocess.run(
         [
             "bash",
-            "./extracted_iso/porteus/make_iso.sh",
+            "extracted_iso/porteus/make_iso.sh",
             f"StresKit-v{args.image_version}-x86_64.iso",
         ],
         check=False,
