@@ -78,7 +78,7 @@ def setup_linpack(binary_destination: str) -> int:
     return 0
 
 
-def patch_linpack(bin_path: str):
+def patch_linpack(bin_path: str) -> int:
     with open(bin_path, "rb") as file:
         file_bytes = file.read()
 
