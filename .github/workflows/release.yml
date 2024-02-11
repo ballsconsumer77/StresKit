@@ -24,10 +24,19 @@ jobs:
               exit 1
           fi
 
+      - name: Calculate SHA256
+        run: |
+          files=("StresKit-v${{ inputs.version }}-x86_64.iso")
+
+          for file in "${files[@]}"; do
+              hash=$(sha256sum "$file" | awk '{print $1}')
+              echo "$file $hash" >> "sha256.txt"
+          done
+
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
-          artifacts: StresKit-v${{ inputs.version }}-x86_64.iso
-          name: StresKit v${{ inputs.version }}
           tag: ${{ inputs.version }}
+          name: StresKit v${{ inputs.version }}
+          artifacts: StresKit-v${{ inputs.version }}-x86_64.iso,sha256.txt
           generateReleaseNotes: true
