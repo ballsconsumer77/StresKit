@@ -19,8 +19,8 @@ jobs:
 
       - name: Build ISO
         run: |
-          if ! python3 build.py --image_version "${{ inputs.version }}"; then
-              echo "error: build.sh exited with non-zero exit code"
+          if ! python3 build.py --image_version ${{ inputs.version }}; then
+              echo "error: build.py exited with non-zero exit code"
               exit 1
           fi
 
