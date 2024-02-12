@@ -69,7 +69,7 @@ def setup_linpack(binary_destination: str) -> int:
         print("error: unable to find correct benchmarks folder")
         return 1
 
-    # copy official binary there as module will be packed later
+    # copy binary to binary_destination
     shutil.copy(
         f"{benchmarks_folder[0]}/linux/share/mkl/benchmarks/linpack/xlinpack_xeon64",
         binary_destination,
