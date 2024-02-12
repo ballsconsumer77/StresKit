@@ -49,7 +49,7 @@ def setup_linpack(binary_destination: str) -> int:
     with open(file_name, "wb") as file:
         file.write(response.content)
 
-    process = subprocess.run(["7z", "x", "linpack.tgz"], check=False)
+    process = subprocess.run(["7z", "x", file_name], check=False)
 
     if process.returncode != 0:
         print(f"error: failed to extract {file_name}")
