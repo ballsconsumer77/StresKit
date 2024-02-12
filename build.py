@@ -164,20 +164,16 @@ def main() -> int:
         return 1
 
     # setup linpack
-    if setup_linpack("porteus/porteus/rootcopy/usr/bin") != 0:
-        print("error: failed to setup linpack")
-        return 1
-
-    if process.returncode != 0:
+    if setup_linpack("porteus/porteus/rootcopy/root/linpack") != 0:
         print("error: failed to setup linpack")
         return 1
 
     # patch linpack binary for AMD
-    if patch_linpack("porteus/porteus/rootcopy/usr/bin/xlinpack_xeon64") != 0:
+    if patch_linpack("porteus/porteus/rootcopy/root/linpack/xlinpack_xeon64") != 0:
         print("error: failed to patch linpack")
         return 1
 
-    # move custom files
+    # merge custom files with extracted iso
     shutil.copytree("porteus", "extracted_iso", dirs_exist_ok=True)
 
     process = subprocess.run(
