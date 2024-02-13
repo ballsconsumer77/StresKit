@@ -1,6 +1,5 @@
 import argparse
 import hashlib
-import os
 import re
 import shutil
 import subprocess
