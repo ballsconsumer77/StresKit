@@ -73,7 +73,7 @@ def extract(
         args.extend(f"-x!{file}" for file in exclude_files)
 
     if force:
-        args.extend("-y")
+        args.append("-y")
 
     process = subprocess.run(args, check=False)
 
@@ -190,9 +190,9 @@ def main() -> int:
             "extracted_iso",
             # don't extract unnecessary modules
             {
-                "-x!porteus/base/002-xorg.xzm",
-                "-x!porteus/base/002-xtra.xzm",
-                "-x!porteus/base/003-openbox.xzm",
+                "porteus/base/002-xorg.xzm",
+                "porteus/base/002-xtra.xzm",
+                "porteus/base/003-openbox.xzm",
             },
             True,
         )
