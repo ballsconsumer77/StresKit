@@ -32,6 +32,31 @@ def calculate_sha256(file_path: str) -> str:
     return sha256_hash.hexdigest()
 
 
+def extract(
+    file_path: str,
+    out_path: str | None = None,
+    exclude_files: set[str] | None = None,
+    force: bool = False,
+) -> int:
+    args = ["7z", "x", file_path]
+
+    if out_path is not None:
+        args.append(f"-o{out_path}")
+
+    if exclude_files is not None:
+        args.extend(f"-x!{file}" for file in exclude_files)
+
+    if force:
+        args.extend("-y")
+
+    process = subprocess.run(args, check=False)
+
+    if process.returncode != 0:
+        return process.returncode
+
+    return 0
+
+
 def setup_linpack(binary_destination: str) -> int:
     # download linpack package
     linpack_url = (
@@ -48,16 +73,12 @@ def setup_linpack(binary_destination: str) -> int:
     with open(file_name, "wb") as file:
         file.write(response.content)
 
-    process = subprocess.run(["7z", "x", file_name], check=False)
-
-    if process.returncode != 0:
+    if extract(file_name, force=True) != 0:
         print(f"error: failed to extract {file_name}")
         return 1
 
     # extract inner file to linpack folder
-    process = subprocess.run(["7z", "x", "linpack.tar", "-olinpack"], check=False)
-
-    if process.returncode != 0:
+    if extract("linpack.tar", "linpack", force=True) != 0:
         print("error: failed to extract linpack.tar")
         return 1
 
@@ -143,22 +164,20 @@ def main() -> int:
         print(f"{local_sha256 = }\n{remote_sha256 = }")
         return 1
 
-    # extract ISO
-    process = subprocess.run(
-        [
-            "7z",
-            "x",
+    if (
+        extract(
             file_name,
-            "-oextracted_iso",
+            "extracted_iso",
             # don't extract unnecessary modules
-            "-x!porteus/base/002-xorg.xzm",
-            "-x!porteus/base/002-xtra.xzm",
-            "-x!porteus/base/003-openbox.xzm",
-        ],
-        check=False,
-    )
-
-    if process.returncode != 0:
+            {
+                "-x!porteus/base/002-xorg.xzm",
+                "-x!porteus/base/002-xtra.xzm",
+                "-x!porteus/base/003-openbox.xzm",
+            },
+            True,
+        )
+        != 0
+    ):
         print(f"error: failed to extract {file_name}")
         return 1
 
