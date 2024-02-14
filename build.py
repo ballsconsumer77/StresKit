@@ -1,12 +1,23 @@
 import argparse
 import hashlib
+import json
 import re
 import shutil
 import subprocess
 import sys
 from glob import glob
+from typing import TypedDict
 
 import requests
+
+
+class Tool(TypedDict):
+    url: str
+    file_name: str
+
+
+class Urls(TypedDict):
+    linpack: Tool
 
 
 def fetch_sha256(source: str, target_file_name: str) -> str:
@@ -57,14 +68,8 @@ def extract(
     return 0
 
 
-def setup_linpack(binary_destination: str) -> int:
-    # download linpack package
-    linpack_url = (
-        "https://downloadmirror.intel.com/793598/l_onemklbench_p_2024.0.0_49515.tgz"
-    )
-    file_name = "linpack.tgz"
-
-    response = requests.get(linpack_url, timeout=5)
+def setup_linpack(url: str, file_name: str, binary_destination: str) -> int:
+    response = requests.get(url, timeout=5)
 
     if response.status_code != 200:
         print(f"error: {file_name} download error, status_code {response.status_code}")
@@ -139,6 +144,10 @@ def main() -> int:
     )
     args = parser.parse_args()
 
+    # load urls.json
+    with open("urls.json", encoding="utf-8") as file:
+        urls: Urls = json.load(file)
+
     # http://porteus.org/porteus-mirrors.html
     src = "http://ftp.vim.org/ftp/os/Linux/distr/porteus/x86_64/Porteus-v5.01"
     file_name = "Porteus-OPENBOX-v5.01-x86_64.iso"
@@ -182,7 +191,14 @@ def main() -> int:
         return 1
 
     # setup linpack
-    if setup_linpack("porteus/porteus/rootcopy/root/linpack") != 0:
+    if (
+        setup_linpack(
+            urls["linpack"]["url"],
+            urls["linpack"]["file_name"],
+            "porteus/porteus/rootcopy/root/linpack",
+        )
+        != 0
+    ):
         print("error: failed to setup linpack")
         return 1
 
