@@ -20,29 +20,6 @@ class Urls(TypedDict):
     linpack: Tool
 
 
-def fetch_sha256(source: str, target_file_name: str) -> str:
-    response = requests.get(source, timeout=5)
-    data = response.text.split("\n")
-
-    for line in data:
-        hash_value, file_name = line.split()
-
-        if file_name == target_file_name:
-            return hash_value
-
-    return ""
-
-
-def calculate_sha256(file_path: str) -> str:
-    sha256_hash = hashlib.sha256()
-
-    with open(file_path, "rb") as file:
-        for byte_block in iter(lambda: file.read(4096), b""):
-            sha256_hash.update(byte_block)
-
-    return sha256_hash.hexdigest()
-
-
 def download_file(url: str, out_path: str) -> int:
     response = requests.get(url, timeout=5)
 
@@ -56,6 +33,29 @@ def download_file(url: str, out_path: str) -> int:
         file.write(response.content)
 
     return 0
+
+
+def calculate_sha256(file_path: str) -> str:
+    sha256_hash = hashlib.sha256()
+
+    with open(file_path, "rb") as file:
+        for byte_block in iter(lambda: file.read(4096), b""):
+            sha256_hash.update(byte_block)
+
+    return sha256_hash.hexdigest()
+
+
+def fetch_sha256(source: str, target_file_name: str) -> str:
+    response = requests.get(source, timeout=5)
+    data = response.text.split("\n")
+
+    for line in data:
+        hash_value, file_name = line.split()
+
+        if file_name == target_file_name:
+            return hash_value
+
+    return ""
 
 
 def extract(
