@@ -78,7 +78,7 @@ def extract(
     process = subprocess.run(args, check=False)
 
     if process.returncode != 0:
-        return process.returncode
+        return 1
 
     return 0
 
@@ -91,9 +91,13 @@ def setup_linpack(url: str, file_name: str, binary_destination: str) -> int:
         print(f"error: failed to extract {file_name}")
         return 1
 
+    # .tgz has .tar with the same file name
+    file_name, _ = file_name.rsplit(".tgz")
+    tar_file = f"{file_name}.tar"
+
     # extract inner file to linpack folder
-    if extract("linpack.tar", "linpack", force=True) != 0:
-        print("error: failed to extract linpack.tar")
+    if extract(tar_file, "linpack", force=True) != 0:
+        print(f"error: failed to extract {tar_file}")
         return 1
 
     # version name changes in folder name (e.g. "benchmarks_2024.0")
@@ -169,6 +173,10 @@ def main() -> int:
     local_sha256 = calculate_sha256(file_name)
     # get remote SHA256
     remote_sha256 = fetch_sha256(f"{src}/sha256sums.txt", file_name)
+
+    if remote_sha256 == "":
+        print("error: failed to get remote hash")
+        return 1
 
     # check if hashes match
     if local_sha256 != remote_sha256:
