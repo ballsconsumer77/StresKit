@@ -6,6 +6,10 @@ on:
       version:
         description: "Version of the StresKit ISO to build (e.g. 1.0.0). This will be used for the file, tag and release name."
         required: true
+
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
