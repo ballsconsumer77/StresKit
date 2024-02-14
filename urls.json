@@ -13,5 +13,10 @@
     "url": "https://www.mersenne.org/download/software/v30/30.8/p95v308b17.linux64.tar.gz",
     "file_name": "p95v308b17.linux64.tar.gz",
     "sha256": "5180c3843d2b5a7c7de4aa5393c13171b0e0709e377c01ca44154608f498bec7"
+  },
+  "ycruncher": {
+    "url": "http://www.numberworld.org/y-cruncher/y-cruncher%20v0.8.3.9533-static.tar.xz",
+    "file_name": "y-cruncher v0.8.3.9533-static.tar.xz",
+    "sha256": "ca026547d6c009e12315e4854d67d821a98e94cb79349b0b5531958083cf2dfb"
   }
 }

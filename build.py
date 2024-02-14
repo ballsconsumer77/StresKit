@@ -21,6 +21,7 @@ class Urls(TypedDict):
     porteus: Tool
     linpack: Tool
     prime95: Tool
+    ycruncher: Tool
 
 
 def download_file(url: str, out_path: str, expected_sha256: str | None = None) -> int:
@@ -165,6 +166,41 @@ def setup_prime95(
     return 0
 
 
+def setup_ycruncher(
+    url: str, file_name: str, sha256: str, folder_destination: str
+) -> int:
+    if download_file(url, file_name, sha256) != 0:
+        return 1
+
+    if extract(file_name, force=True) != 0:
+        print(f"error: failed to extract {file_name}")
+        return 1
+
+    # .tgz has .tar with the same file name
+    file_name, _ = file_name.rsplit(".tar.xz")
+    tar_file = f"{file_name}.tar"
+
+    # extract inner file to ycruncher folder
+    if extract(tar_file, force=True) != 0:
+        print(f"error: failed to extract {tar_file}")
+        return 1
+
+    # version name changes in folder name (e.g. "y-cruncher v0.8.3.9533")
+    ycruncher_folder = glob("y-cruncher*-static")
+
+    if len(ycruncher_folder) != 1:
+        print("error: unable to find correct ycruncher folder")
+        return 1
+
+    # copy folder to folder_destination
+    shutil.copytree(
+        ycruncher_folder[0],
+        folder_destination,
+    )
+
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -244,6 +280,21 @@ def main() -> int:
         return 1
 
     bashrc_lines.append("alias prime95='(cd /root/prime95 && ./mprime)'")
+
+    # setup ycruncher
+    if (
+        setup_ycruncher(
+            urls["ycruncher"]["url"],
+            urls["ycruncher"]["file_name"],
+            urls["ycruncher"]["sha256"],
+            "porteus/porteus/rootcopy/root/ycruncher",
+        )
+        != 0
+    ):
+        print("error: failed to setup ycruncher")
+        return 1
+
+    bashrc_lines.append("alias ycruncher='(cd /root/ycruncher && ./y-cruncher)'")
 
     # write contents to .bashrc
     with open("porteus/porteus/rootcopy/root/.bashrc", "a", encoding="utf-8") as file:
