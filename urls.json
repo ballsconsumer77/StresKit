@@ -1,6 +1,7 @@
 {
   "linpack": {
     "url": "https://downloadmirror.intel.com/793598/l_onemklbench_p_2024.0.0_49515.tgz",
-    "file_name": "l_onemklbench_p_2024.0.0_49515.tgz"
+    "file_name": "l_onemklbench_p_2024.0.0_49515.tgz",
+    "sha256": "e934867f778cb5df1c50c75a1b63ce04ec1ce461b4cfeef05b94329a0caccef4"
   }
 }

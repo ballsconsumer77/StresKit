@@ -14,13 +14,14 @@ import requests
 class Tool(TypedDict):
     url: str
     file_name: str
+    sha256: str
 
 
 class Urls(TypedDict):
     linpack: Tool
 
 
-def download_file(url: str, out_path: str) -> int:
+def download_file(url: str, out_path: str, expected_sha256: str | None = None) -> int:
     response = requests.get(url, timeout=5)
 
     if response.status_code != 200:
@@ -29,20 +30,19 @@ def download_file(url: str, out_path: str) -> int:
         )
         return 1
 
+    if expected_sha256 is not None:
+        hash_object = hashlib.sha256(response.content)
+        local_sha256 = hash_object.hexdigest()
+
+        if local_sha256 != expected_sha256:
+            print("error: hashes do not match")
+            print(f"{local_sha256 = }\n{expected_sha256 = }")
+            return 1
+
     with open(out_path, "wb") as file:
         file.write(response.content)
 
     return 0
-
-
-def calculate_sha256(file_path: str) -> str:
-    sha256_hash = hashlib.sha256()
-
-    with open(file_path, "rb") as file:
-        for byte_block in iter(lambda: file.read(4096), b""):
-            sha256_hash.update(byte_block)
-
-    return sha256_hash.hexdigest()
 
 
 def fetch_sha256(source: str, target_file_name: str) -> str:
@@ -83,8 +83,10 @@ def extract(
     return 0
 
 
-def setup_linpack(url: str, file_name: str, binary_destination: str) -> int:
-    if download_file(url, file_name) != 0:
+def setup_linpack(
+    url: str, file_name: str, sha256: str, binary_destination: str
+) -> int:
+    if download_file(url, file_name, sha256) != 0:
         return 1
 
     if extract(file_name, force=True) != 0:
@@ -165,12 +167,6 @@ def main() -> int:
     src = "http://ftp.vim.org/ftp/os/Linux/distr/porteus/x86_64/Porteus-v5.01"
     file_name = "Porteus-OPENBOX-v5.01-x86_64.iso"
 
-    # download ISO file
-    if download_file(f"{src}/{file_name}", file_name) != 0:
-        return 1
-
-    # get local SHA256
-    local_sha256 = calculate_sha256(file_name)
     # get remote SHA256
     remote_sha256 = fetch_sha256(f"{src}/sha256sums.txt", file_name)
 
@@ -178,10 +174,8 @@ def main() -> int:
         print("error: failed to get remote hash")
         return 1
 
-    # check if hashes match
-    if local_sha256 != remote_sha256:
-        print("error: hashes do not match")
-        print(f"{local_sha256 = }\n{remote_sha256 = }")
+    # download ISO file
+    if download_file(f"{src}/{file_name}", file_name, remote_sha256) != 0:
         return 1
 
     if (
@@ -206,6 +200,7 @@ def main() -> int:
         setup_linpack(
             urls["linpack"]["url"],
             urls["linpack"]["file_name"],
+            urls["linpack"]["sha256"],
             "porteus/porteus/rootcopy/root/linpack",
         )
         != 0
