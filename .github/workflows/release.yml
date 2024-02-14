@@ -17,6 +17,9 @@ jobs:
       - name: Install mkisofs
         run: sudo apt-get install -y mkisofs
 
+      - name: Install dependencies
+        run: python -m pip install -r requirements.txt
+
       - name: Build ISO
         run: |
           if ! python3 build.py --image_version ${{ inputs.version }}; then
