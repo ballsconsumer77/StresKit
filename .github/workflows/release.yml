@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version of the StresKit ISO to build (e.g. 1.0.0). This will be used for the file, tag and release name."
+        description: "Version of the ISO to build. This will be used for the tag and release name."
         required: true
 
 permissions:
