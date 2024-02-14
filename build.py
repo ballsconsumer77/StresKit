@@ -20,6 +20,7 @@ class Tool(TypedDict):
 class Urls(TypedDict):
     porteus: Tool
     linpack: Tool
+    prime95: Tool
 
 
 def download_file(url: str, out_path: str, expected_sha256: str | None = None) -> int:
@@ -136,6 +137,34 @@ def patch_linpack(bin_path: str) -> int:
     return 0
 
 
+def setup_prime95(
+    url: str, file_name: str, sha256: str, folder_destination: str
+) -> int:
+    if download_file(url, file_name, sha256) != 0:
+        return 1
+
+    if extract(file_name, force=True) != 0:
+        print(f"error: failed to extract {file_name}")
+        return 1
+
+    # .tgz has .tar with the same file name
+    file_name, _ = file_name.rsplit(".tar.gz")
+    tar_file = f"{file_name}.tar"
+
+    # extract inner file to prime95 folder
+    if extract(tar_file, "prime95", force=True) != 0:
+        print(f"error: failed to extract {tar_file}")
+        return 1
+
+    # copy folder to folder_destination
+    shutil.copytree(
+        "prime95",
+        folder_destination,
+    )
+
+    return 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -200,6 +229,21 @@ def main() -> int:
     if patch_linpack("porteus/porteus/rootcopy/root/linpack/xlinpack_xeon64") != 0:
         print("error: failed to patch linpack")
         return 1
+
+    # setup prime95
+    if (
+        setup_prime95(
+            urls["prime95"]["url"],
+            urls["prime95"]["file_name"],
+            urls["prime95"]["sha256"],
+            "porteus/porteus/rootcopy/root/prime95",
+        )
+        != 0
+    ):
+        print("error: failed to setup prime95")
+        return 1
+
+    bashrc_lines.append("alias prime95='(cd /root/prime95 && ./mprime)'")
 
     # write contents to .bashrc
     with open("porteus/porteus/rootcopy/root/.bashrc", "a", encoding="utf-8") as file:
