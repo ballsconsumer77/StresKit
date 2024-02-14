@@ -18,6 +18,7 @@ class Tool(TypedDict):
 
 
 class Urls(TypedDict):
+    porteus: Tool
     linpack: Tool
 
 
@@ -43,19 +44,6 @@ def download_file(url: str, out_path: str, expected_sha256: str | None = None) -
         file.write(response.content)
 
     return 0
-
-
-def fetch_sha256(source: str, target_file_name: str) -> str:
-    response = requests.get(source, timeout=5)
-    data = response.text.split("\n")
-
-    for line in data:
-        hash_value, file_name = line.split()
-
-        if file_name == target_file_name:
-            return hash_value
-
-    return ""
 
 
 def extract(
@@ -163,24 +151,20 @@ def main() -> int:
     with open("urls.json", encoding="utf-8") as file:
         urls: Urls = json.load(file)
 
-    # http://porteus.org/porteus-mirrors.html
-    src = "http://ftp.vim.org/ftp/os/Linux/distr/porteus/x86_64/Porteus-v5.01"
-    file_name = "Porteus-OPENBOX-v5.01-x86_64.iso"
-
-    # get remote SHA256
-    remote_sha256 = fetch_sha256(f"{src}/sha256sums.txt", file_name)
-
-    if remote_sha256 == "":
-        print("error: failed to get remote hash")
-        return 1
-
     # download ISO file
-    if download_file(f"{src}/{file_name}", file_name, remote_sha256) != 0:
+    if (
+        download_file(
+            urls["porteus"]["url"],
+            urls["porteus"]["file_name"],
+            urls["porteus"]["sha256"],
+        )
+        != 0
+    ):
         return 1
 
     if (
         extract(
-            file_name,
+            urls["porteus"]["file_name"],
             "extracted_iso",
             # don't extract unnecessary modules
             {
@@ -192,7 +176,7 @@ def main() -> int:
         )
         != 0
     ):
-        print(f"error: failed to extract {file_name}")
+        print(f"error: failed to extract {urls['porteus']['file_name']}")
         return 1
 
     # setup linpack
