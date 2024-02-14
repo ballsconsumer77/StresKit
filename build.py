@@ -43,6 +43,21 @@ def calculate_sha256(file_path: str) -> str:
     return sha256_hash.hexdigest()
 
 
+def download_file(url: str, out_path: str) -> int:
+    response = requests.get(url, timeout=5)
+
+    if response.status_code != 200:
+        print(
+            f"error: {url} {out_path} download error, status_code {response.status_code}"
+        )
+        return 1
+
+    with open(out_path, "wb") as file:
+        file.write(response.content)
+
+    return 0
+
+
 def extract(
     file_path: str,
     out_path: str | None = None,
@@ -69,14 +84,8 @@ def extract(
 
 
 def setup_linpack(url: str, file_name: str, binary_destination: str) -> int:
-    response = requests.get(url, timeout=5)
-
-    if response.status_code != 200:
-        print(f"error: {file_name} download error, status_code {response.status_code}")
+    if download_file(url, file_name) != 0:
         return 1
-
-    with open(file_name, "wb") as file:
-        file.write(response.content)
 
     if extract(file_name, force=True) != 0:
         print(f"error: failed to extract {file_name}")
@@ -153,14 +162,8 @@ def main() -> int:
     file_name = "Porteus-OPENBOX-v5.01-x86_64.iso"
 
     # download ISO file
-    response = requests.get(f"{src}/{file_name}", timeout=5)
-
-    if response.status_code != 200:
-        print(f"error: {file_name} download error, status_code {response.status_code}")
+    if download_file(f"{src}/{file_name}", file_name) != 0:
         return 1
-
-    with open(file_name, "wb") as file:
-        file.write(response.content)
 
     # get local SHA256
     local_sha256 = calculate_sha256(file_name)
