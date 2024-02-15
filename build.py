@@ -93,9 +93,7 @@ def setup_linpack(
         return 1
 
     # version name changes in folder name (e.g. "benchmarks_2024.0")
-    benchmarks_folder = glob("linpack/benchmarks*")
-
-    if len(benchmarks_folder) != 1:
+    if len(benchmarks_folder := glob("linpack/benchmarks*")) != 1:
         print("error: unable to find correct benchmarks folder")
         return 1
 
@@ -186,10 +184,8 @@ def setup_ycruncher(
         return 1
 
     # version name changes in folder name (e.g. "y-cruncher v0.8.3.9533")
-    ycruncher_folder = glob("y-cruncher*-static")
-
-    if len(ycruncher_folder) != 1:
-        print("error: unable to find correct ycruncher folder")
+    if len(ycruncher_folder := glob("y-cruncher*-static")) != 1:
+        print("error: unable to find correct benchmarks folder")
         return 1
 
     # copy folder to folder_destination
