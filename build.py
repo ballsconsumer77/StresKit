@@ -1,6 +1,7 @@
 import argparse
 import hashlib
 import json
+import os
 import re
 import shutil
 import subprocess
@@ -40,21 +41,39 @@ def extract(
     exclude_files: set[str] | None = None,
     force: bool = False,
 ) -> int:
-    args = ["7z", "x", file_path]
+    file_extension = os.path.splitext(file_path)[1]
 
-    if out_path is not None:
-        args.append(f"-o{out_path}")
+    if file_extension in {".tgz", ".gz", ".xz"}:
+        args = ["tar", "-xf", file_path]
 
-    if exclude_files is not None:
-        args.extend(f"-x!{file}" for file in exclude_files)
+        if out_path is not None:
+            os.mkdir(out_path)
+            args.extend(["-C", out_path])
 
-    if force:
-        args.append("-y")
+        process = subprocess.run(
+            args,
+            check=False,
+        )
 
-    process = subprocess.run(args, check=False)
+        if process.returncode != 0:
+            return 1
 
-    if process.returncode != 0:
-        return 1
+    else:
+        args = ["7z", "x", file_path]
+
+        if out_path is not None:
+            args.append(f"-o{out_path}")
+
+        if exclude_files is not None:
+            args.extend(f"-x!{file}" for file in exclude_files)
+
+        if force:
+            args.append("-y")
+
+        process = subprocess.run(args, check=False)
+
+        if process.returncode != 0:
+            return 1
 
     return 0
 
@@ -65,17 +84,8 @@ def setup_linpack(
     if download_file(url, file_name, sha256) != 0:
         return 1
 
-    if extract(file_name, force=True) != 0:
+    if extract(file_name, "linpack", force=True) != 0:
         print(f"error: failed to extract {file_name}")
-        return 1
-
-    # .tgz has .tar with the same file name
-    file_name, _ = file_name.rsplit(".tgz")
-    tar_file = f"{file_name}.tar"
-
-    # extract inner file to linpack folder
-    if extract(tar_file, "linpack", force=True) != 0:
-        print(f"error: failed to extract {tar_file}")
         return 1
 
     # version name changes in folder name (e.g. "benchmarks_2024.0")
@@ -128,17 +138,8 @@ def setup_prime95(
     if download_file(url, file_name, sha256) != 0:
         return 1
 
-    if extract(file_name, force=True) != 0:
+    if extract(file_name, "prime95", force=True) != 0:
         print(f"error: failed to extract {file_name}")
-        return 1
-
-    # .tgz has .tar with the same file name
-    file_name, _ = file_name.rsplit(".tar.gz")
-    tar_file = f"{file_name}.tar"
-
-    # extract inner file to prime95 folder
-    if extract(tar_file, "prime95", force=True) != 0:
-        print(f"error: failed to extract {tar_file}")
         return 1
 
     # copy folder to folder_destination
@@ -158,15 +159,6 @@ def setup_ycruncher(
 
     if extract(file_name, force=True) != 0:
         print(f"error: failed to extract {file_name}")
-        return 1
-
-    # .tgz has .tar with the same file name
-    file_name, _ = file_name.rsplit(".tar.xz")
-    tar_file = f"{file_name}.tar"
-
-    # extract inner file to ycruncher folder
-    if extract(tar_file, force=True) != 0:
-        print(f"error: failed to extract {tar_file}")
         return 1
 
     # version name changes in folder name (e.g. "y-cruncher v0.8.3.9533")
