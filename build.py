@@ -208,8 +208,6 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    bashrc_lines: list[str] = []
-
     # load urls.json
     with open("urls.json", encoding="utf-8") as file:
         urls: Urls = json.load(file)
@@ -255,8 +253,6 @@ def main() -> int:
         print("error: failed to setup linpack")
         return 1
 
-    bashrc_lines.append("alias linpack='(cd /root/linpack && ./runme_xeon64.sh)'")
-
     # patch linpack binary for AMD
     if patch_linpack("porteus/porteus/rootcopy/root/linpack/xlinpack_xeon64") != 0:
         print("error: failed to patch linpack")
@@ -275,8 +271,6 @@ def main() -> int:
         print("error: failed to setup prime95")
         return 1
 
-    bashrc_lines.append("alias prime95='(cd /root/prime95 && ./mprime)'")
-
     # setup ycruncher
     if (
         setup_ycruncher(
@@ -289,13 +283,6 @@ def main() -> int:
     ):
         print("error: failed to setup ycruncher")
         return 1
-
-    bashrc_lines.append("alias ycruncher='(cd /root/ycruncher && ./y-cruncher)'")
-
-    # write contents to .bashrc
-    with open("porteus/porteus/rootcopy/root/.bashrc", "a", encoding="utf-8") as file:
-        for line in bashrc_lines:
-            file.write(f"{line}\n")
 
     # merge custom files with extracted iso
     shutil.copytree("porteus", "extracted_iso", dirs_exist_ok=True)
