@@ -6,22 +6,8 @@ import shutil
 import subprocess
 import sys
 from glob import glob
-from typing import TypedDict
 
 import requests
-
-
-class Tool(TypedDict):
-    url: str
-    file_name: str
-    sha256: str
-
-
-class Urls(TypedDict):
-    porteus: Tool
-    linpack: Tool
-    prime95: Tool
-    ycruncher: Tool
 
 
 def download_file(url: str, out_path: str, expected_sha256: str | None = None) -> int:
@@ -210,7 +196,7 @@ def main() -> int:
 
     # load urls.json
     with open("urls.json", encoding="utf-8") as file:
-        urls: Urls = json.load(file)
+        urls = json.load(file)
 
     # download ISO file
     if (
