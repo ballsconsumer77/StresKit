@@ -1,7 +1,0 @@
-
-
-1 # number of tests
-35376 # problem sizes
-35376 # leading dimensions
-100 # times to run a test
-4 # alignment values (in KBytes)
