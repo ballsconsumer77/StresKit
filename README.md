@@ -8,13 +8,26 @@ Lightweight bootable ISO based on [Porteus](https://www.porteus.org) containing 
 
 ## Usage
 
-Download the latest [StresKit](https://github.com/amitxv/StresKit/releases) ISO and burn it to a USB with [Rufus](https://rufus.ie/en). [Ventoy](https://www.ventoy.net/en/index.html) is another popular option.
+1. Download the latest [StresKit](https://github.com/amitxv/StresKit/releases) ISO and burn it to a USB with [Rufus](https://rufus.ie/en) then boot to it through UEFI. [Ventoy](https://www.ventoy.net/en/index.html) is another popular option.
+2. The login username is ``root`` and the password is ``toor``
+3. While any given test is running, you can switch to a different TTY to carry out other tasks such as viewing sensors. As an example, press ``Ctrl+Alt+F2`` to switch to TTY 2 and ``Ctrl+Alt+F1`` to switch back to TTY 1
 
 ## What's Included?
 
+- [Temperature Sensor](#temperature-sensor)
 - [Linpack](#linpack)
 - [Prime95](#prime95)
 - [y-cruncher](#y-cruncher)
+
+## Temperature Sensor
+
+View temperature of each CPU in the system. This is simply an alias for ``watch -n 1 sensors coretemp-isa-0000``.
+
+Usage:
+
+```
+sensors
+```
 
 ## [Linpack](https://en.wikipedia.org/wiki/LINPACK_benchmarks)
 
