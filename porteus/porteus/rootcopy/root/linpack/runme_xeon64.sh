@@ -88,8 +88,8 @@ main() {
 
     # run linpack
     ./xlinpack_xeon64 lininput_xeon64
+
     return 0
 }
-
 
 main "$@"
