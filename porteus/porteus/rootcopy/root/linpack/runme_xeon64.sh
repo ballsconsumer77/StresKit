@@ -50,7 +50,7 @@ main() {
         memory_in_gb=$memory_arg
     else
         # use 80% of available memory by default
-        mem_total_gb=$(echo "$(grep MemTotal /proc/meminfo | awk '{print $2}') / 1024^2" | bc)
+        mem_total_gb=$(echo "$(grep MemTotal /proc/meminfo | awk '{print $2}') / 1048576" | bc)
         memory_in_gb=$(echo "scale=2; $mem_total_gb * 0.8" | bc)
     fi
 
