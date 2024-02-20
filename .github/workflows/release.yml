@@ -7,6 +7,12 @@ on:
         description: "Version of the ISO to build. This will be used for the tag and release name."
         required: true
 
+      pre-release:
+        description: "Pre-release"
+        required: true
+        default: false
+        type: boolean
+
 permissions:
   contents: write
 
@@ -45,5 +51,6 @@ jobs:
         with:
           tag: ${{ inputs.version }}
           name: StresKit v${{ inputs.version }}
+          prerelease: ${{ inputs.pre-release }}
           artifacts: StresKit-v${{ inputs.version }}-x86_64.iso,sha256.txt
           generateReleaseNotes: true
