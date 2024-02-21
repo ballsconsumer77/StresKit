@@ -40,7 +40,7 @@ Usage:
 linpack [-m <gb>] [-s <samples>]
 ```
 
-- ``-m`` is the memory size in gigabytes. If not specified, 80% of the total available memory will be used as per Intel's recommendations
+- ``-m`` is the memory size in gigabytes. If not specified, free memory minus 100mb will be used
 - ``-s`` is the number of trials to run. If not specified, 100 trials will be executed
 
 ## [Prime95](https://www.mersenne.org/download)
