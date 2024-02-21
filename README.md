@@ -18,6 +18,7 @@ Lightweight bootable ISO based on [Porteus](https://www.porteus.org) containing 
 - [Linpack](#linpack)
 - [Prime95](#prime95)
 - [y-cruncher](#y-cruncher)
+- [Intel® Memory Latency Checker (Intel® MLC)](#intel®-memory-latency-checker-intel®-mlc)
 
 ## Temperature Sensor
 
@@ -26,7 +27,7 @@ View temperature of each CPU in the system. This is simply an alias for ``watch 
 Usage:
 
 ```
-sensors
+cputemp
 ```
 
 ## [Linpack](https://en.wikipedia.org/wiki/LINPACK_benchmarks)
@@ -56,6 +57,14 @@ Usage:
 
 ```
 ycruncher
+```
+
+## [Intel® Memory Latency Checker (Intel® MLC)](https://www.intel.com/content/www/us/en/developer/articles/tool/intelr-memory-latency-checker.html)
+
+Usage:
+
+```
+mlc
 ```
 
 ## Building
