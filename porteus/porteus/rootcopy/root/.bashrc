@@ -1,5 +1,4 @@
 alias skhelp='cat /etc/issue'
-alias cputemp='watch -n 1 sensors coretemp-isa-0000'
 
 linpack() {
     (cd /root/tools/linpack && ./runme_xeon64.sh "$@")

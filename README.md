@@ -13,11 +13,68 @@ Lightweight bootable ISO based on [Porteus](https://www.porteus.org) containing 
 3. After logging in, you can use the tools packaged in StresKit. See [What's Included?](#whats-included) for the available tools
 4. While any given test is running, you can switch to a different TTY to carry out other tasks such as viewing sensors. As an example, press ``Ctrl+Alt+F2`` to switch to TTY 2 and ``Ctrl+Alt+F1`` to switch back to TTY 1
 
-## Viewing Large Outputs
+## Tips
+
+### Display StresKit Help Message
+
+Type ``skhelp`` to display the [pre-login help message](/porteus/porteus/rootcopy/etc/issue) for a breif overview of the available commands.
+
+### Switch TTY
+
+In cases where you need to multitask but can't interact with the main terminal such as wanting to view sensors while a stress-test is running, you can switch to another *virtual terminal* by pressing ``Ctrl+Alt+F2`` and complete your tasks on there. Switch back to TTY 1 by pressing ``Ctrl+Alt+F1``.
+
+### Sensors
+
+Type ``watch sensors`` to view sensors. You can view sensors while a stress-test is running by [switching to another TTY](#switch-tty).
+
+To monitor a specific sensor, specify the name of the sensor in the command ``watch sensors <sensor_name>``. See example below.
+
+Output of ``watch sensors``:
+
+```ba
+nouveau-pci-0100
+Adapter: PCI adapter
+fan1:           0RPM
+temp1:        +33.0°C (high = +95.0°C, hyst = +3.0°C)
+                      (crit = +105.0°C, hyst = +5.0°C)
+                      (emerg = +135.0°C, hyst = +5.0°C)
+
+acpitz-acpi-0
+Adapter: ACPI interface
+temp1:        +27.8°C (crit = +119.0°C)
+
+coretemp-isa-0000
+Adapter: ISA adapter
+Package id 0:  +35.0°C (high = +101.0°C, crit = +115.0°C)
+Core 0:        +30.0°C (high = +101.0°C, crit = +115.0°C)
+Core 1:        +30.0°C (high = +101.0°C, crit = +115.0°C)
+Core 2:        +34.0°C (high = +101.0°C, crit = +115.0°C)
+Core 3:        +28.0°C (high = +101.0°C, crit = +115.0°C)
+Core 4:        +28.0°C (high = +101.0°C, crit = +115.0°C)
+Core 5:        +28.0°C (high = +101.0°C, crit = +115.0°C)
+Core 6:        +35.0°C (high = +101.0°C, crit = +115.0°C)
+Core 7:        +27.0°C (high = +101.0°C, crit = +115.0°C)
+
+nume-pci-0400
+Adapter: PCI adapter
+Composite:    +28.9°C (low  = -273.1°C, high = +81.8°C)
+                      (crit = +84.8°C)
+
+Sensor 1:     +28.9°C (low = -273.1°C, high +65261.8°C)
+Sensor 2:     +35.9°C (low = -273.1°C, high = +65261.8°C)
+```
+
+To only view ``coretemp-isa-0000``, you would type:
+
+```bash
+watch sensors coretemp-isa-0000
+```
+
+### Viewing Large Outputs
 
 Scrolling in Porteus is a bit tedious. For this reason, you can write stdout to a file while viewing the output simultaneously with the ``tee`` command. This also allows you to backup the output on a USB drive if needed which can be useful for other purposes.
 
-```sh
+```bash
 <command> | tee -a output.txt
 ```
 
@@ -25,32 +82,10 @@ Learn the basic syntax of ``vi`` by watching [this video](https://www.youtube.co
 
 ## What's Included?
 
-- [Help Message](#help-message)
-- [Temperature Sensor](#temperature-sensor)
 - [Linpack](#linpack)
 - [Prime95](#prime95)
 - [y-cruncher](#y-cruncher)
 - [Intel® Memory Latency Checker (Intel® MLC)](#intel®-memory-latency-checker-intel®-mlc)
-
-## Help Message
-
-Display the pre-login help message containing an overview of commands.
-
-Usage:
-
-```
-skhelp
-```
-
-## Temperature Sensor
-
-View temperature of each CPU in the system. This is simply an alias for ``watch -n 1 sensors coretemp-isa-0000``.
-
-Usage:
-
-```
-cputemp
-```
 
 ## [Linpack](https://en.wikipedia.org/wiki/LINPACK_benchmarks)
 
@@ -69,7 +104,7 @@ linpack [-m <gb>] [-s <samples>]
 
 Usage:
 
-```
+```bash
 prime95
 ```
 
@@ -77,7 +112,7 @@ prime95
 
 Usage:
 
-```
+```bash
 ycruncher
 ```
 
@@ -85,7 +120,7 @@ ycruncher
 
 Usage:
 
-```
+```bash
 mlc
 ```
 
