@@ -90,13 +90,25 @@ watch sensors coretemp-isa-0000
 
 ## Viewing Large Outputs
 
-Scrolling in Porteus is a bit tedious. For this reason, you can write stdout to a file while viewing the output simultaneously with the ``tee`` command. This also allows you to back up the output on a USB drive if needed which can be useful for other purposes.
+Scrolling in Porteus is a bit tedious. For this reason, you can write stdout to a file while viewing the output simultaneously with the ``tee`` command. This also allows you to back up the output on a USB drive if needed which can be useful for other purposes such as saving them for later or comparing results.
 
 ```bash
 <command> | tee -a output.txt
 ```
 
 Learn the basic syntax of ``vi`` by watching [this video](https://www.youtube.com/watch?v=vo2FXvPkcEA). Use ``vi output.txt`` to view the ``output.txt`` file at any given time.
+
+## Accessing Local Storage
+
+Sometimes you may want to access local storage whether it be the USB or your computer's drive.
+
+To identify mounted devices, type:
+
+```bash
+ls /mnt/*
+```
+
+You can ``ls`` each of them to identify which is the desired storage device if the name isn't obvious.
 
 ## [Linpack](https://en.wikipedia.org/wiki/LINPACK_benchmarks)
 
