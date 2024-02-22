@@ -54,11 +54,7 @@ jobs:
           fi
 
       - name: Build ISO
-        run: |
-          if ! python3 build.py --image_version ${{ steps.get-version.outputs.version }}; then
-              echo "error: build.py exited with non-zero exit code"
-              exit 1
-          fi
+        run: python3 build.py --image_version ${{ steps.get-version.outputs.version }}
 
       - name: Calculate SHA256
         run: |
