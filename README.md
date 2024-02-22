@@ -28,6 +28,7 @@ python build.py
 - [Switch TTY](#switch-tty)
 - [Sensors](#sensors)
 - [Viewing Large Outputs](#viewing-large-outputs)
+- [Accessing Local Storage](#accessing-local-storage)
 - [Linpack](#linpack)
 - [Prime95](#prime95)
 - [y-cruncher](#y-cruncher)
