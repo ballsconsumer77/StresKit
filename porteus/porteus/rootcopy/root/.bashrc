@@ -15,5 +15,3 @@ ycruncher() {
 mlc() {
     (cd /root/tools && ./mlc "$@")
 }
-
-chmod -R +x /root/tools
