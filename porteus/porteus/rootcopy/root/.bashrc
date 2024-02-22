@@ -1,3 +1,4 @@
+alias skhelp='cat /etc/issue'
 alias cputemp='watch -n 1 sensors coretemp-isa-0000'
 
 linpack() {

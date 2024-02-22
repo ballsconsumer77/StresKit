@@ -25,11 +25,22 @@ Learn the basic syntax of ``vi`` by watching [this video](https://www.youtube.co
 
 ## What's Included?
 
+- [Help Message](#help-message)
 - [Temperature Sensor](#temperature-sensor)
 - [Linpack](#linpack)
 - [Prime95](#prime95)
 - [y-cruncher](#y-cruncher)
 - [Intel® Memory Latency Checker (Intel® MLC)](#intel®-memory-latency-checker-intel®-mlc)
+
+## Help Message
+
+Display the pre-login help message containing an overview of commands.
+
+Usage:
+
+```
+skhelp
+```
 
 ## Temperature Sensor
 
