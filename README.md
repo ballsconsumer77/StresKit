@@ -6,24 +6,42 @@
 
 Lightweight bootable ISO based on [Porteus](https://www.porteus.org) containing a compendium of stress-testing related tools and utilities.
 
-## Usage
+## Setup
 
 1. Download the latest [StresKit](https://github.com/amitxv/StresKit/releases) ISO and burn it to a USB with [Rufus](https://rufus.ie/en) then boot to it through UEFI. [Ventoy](https://www.ventoy.net/en/index.html) (use grub2 mode if normal mode doesn't work) is another popular option
 2. The login username is ``root`` and the password is ``toor``
-3. After logging in, you can use the tools packaged in StresKit. See [What's Included?](#whats-included) for the available tools
-4. While any given test is running, you can switch to a different TTY to carry out other tasks such as viewing sensors. As an example, press ``Ctrl+Alt+F2`` to switch to TTY 2 and ``Ctrl+Alt+F1`` to switch back to TTY 1
+3. After logging in, you can use the tools packaged in StresKit. See the [Usage](#usage) section for the available tools
 
-## Tips
+## Building
 
-### Display StresKit Help Message
+The ``build.py`` script can be used to build the ISO. It is designed to run on [ubuntu-latest](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners) for GitHub actions, but you can use a Linux distro of your choice.
 
-Type ``skhelp`` to display the [pre-login help message](/porteus/porteus/rootcopy/etc/issue) for a breif overview of the available commands.
+```bash
+git clone https://github.com/amitxv/StresKit.git
+cd StresKit/
+python build.py
+```
 
-### Switch TTY
+## Usage
+
+- [Display StresKit Help Message](#display-streskit-help-message)
+- [Switch TTY](#switch-tty)
+- [Sensors](#sensors)
+- [Viewing Large Outputs](#viewing-large-outputs)
+- [Linpack](#linpack)
+- [Prime95](#prime95)
+- [y-cruncher](#y-cruncher)
+- [Intel® Memory Latency Checker (Intel® MLC)](#intel®-memory-latency-checker-intel®-mlc)
+
+## Display StresKit Help Message
+
+Type ``skhelp`` to display the [pre-login help message](/porteus/porteus/rootcopy/etc/issue) for a brief overview of the available commands.
+
+## Switch TTY
 
 In cases where you need to multitask but can't interact with the main terminal such as wanting to view sensors while a stress-test is running, you can switch to another *virtual terminal* by pressing ``Ctrl+Alt+F2`` and complete your tasks on there. Switch back to TTY 1 by pressing ``Ctrl+Alt+F1``.
 
-### Sensors
+## Sensors
 
 Type ``watch sensors`` to view sensors. You can view sensors while a stress-test is running by [switching to another TTY](#switch-tty).
 
@@ -70,22 +88,15 @@ To only view ``coretemp-isa-0000``, you would type:
 watch sensors coretemp-isa-0000
 ```
 
-### Viewing Large Outputs
+## Viewing Large Outputs
 
-Scrolling in Porteus is a bit tedious. For this reason, you can write stdout to a file while viewing the output simultaneously with the ``tee`` command. This also allows you to backup the output on a USB drive if needed which can be useful for other purposes.
+Scrolling in Porteus is a bit tedious. For this reason, you can write stdout to a file while viewing the output simultaneously with the ``tee`` command. This also allows you to back up the output on a USB drive if needed which can be useful for other purposes.
 
 ```bash
 <command> | tee -a output.txt
 ```
 
 Learn the basic syntax of ``vi`` by watching [this video](https://www.youtube.com/watch?v=vo2FXvPkcEA). Use ``vi output.txt`` to view the ``output.txt`` file at any given time.
-
-## What's Included?
-
-- [Linpack](#linpack)
-- [Prime95](#prime95)
-- [y-cruncher](#y-cruncher)
-- [Intel® Memory Latency Checker (Intel® MLC)](#intel®-memory-latency-checker-intel®-mlc)
 
 ## [Linpack](https://en.wikipedia.org/wiki/LINPACK_benchmarks)
 
@@ -122,14 +133,4 @@ Usage:
 
 ```bash
 mlc
-```
-
-## Building
-
-The ``build.py`` script can be used to build the ISO. It is designed to run on [ubuntu-latest](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners) for GitHub actions, but you can use a Linux distro of your choice.
-
-```bash
-git clone https://github.com/amitxv/StresKit.git
-cd StresKit/
-python build.py
 ```
