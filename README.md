@@ -10,7 +10,18 @@ Lightweight bootable ISO based on [Porteus](https://www.porteus.org) containing 
 
 1. Download the latest [StresKit](https://github.com/amitxv/StresKit/releases) ISO and burn it to a USB with [Rufus](https://rufus.ie/en) then boot to it through UEFI. [Ventoy](https://www.ventoy.net/en/index.html) is another popular option
 2. The login username is ``root`` and the password is ``toor``
-3. While any given test is running, you can switch to a different TTY to carry out other tasks such as viewing sensors. As an example, press ``Ctrl+Alt+F2`` to switch to TTY 2 and ``Ctrl+Alt+F1`` to switch back to TTY 1
+3. After logging in, you can use the tools packaged in StresKit. See [What's Included?](#whats-included) for the available tools
+4. While any given test is running, you can switch to a different TTY to carry out other tasks such as viewing sensors. As an example, press ``Ctrl+Alt+F2`` to switch to TTY 2 and ``Ctrl+Alt+F1`` to switch back to TTY 1
+
+## Viewing Large Outputs
+
+Scrolling in Porteus is a bit tedious. For this reason, you can write stdout to a file while viewing the output simultaneously with the ``tee`` command. This also allows you to backup the output on a USB drive if needed which can be useful for other purposes.
+
+```sh
+<command> | tee -a output.txt
+```
+
+Learn the basic syntax of ``vi`` by watching [this video](https://www.youtube.com/watch?v=vo2FXvPkcEA). Use ``vi output.txt`` to view the ``output.txt`` file at any given time.
 
 ## What's Included?
 
