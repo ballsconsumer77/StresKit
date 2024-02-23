@@ -1,5 +1,6 @@
 import argparse
 import json
+import logging
 import os
 import re
 import shutil
@@ -10,11 +11,16 @@ from glob import glob
 
 import requests
 
+logger = logging.getLogger("CLI")
+
 
 def dl_file(url: str, outfile: str) -> int:
+    logging.info("downloading %s to %s", url, outfile)
+
     response = requests.get(url, timeout=5)
 
     if not response.ok:
+        logger.error("response failed with status code %d - %s", response.status_code, response.text)
         return 1
 
     with open(outfile, "wb") as fp:
@@ -24,6 +30,8 @@ def dl_file(url: str, outfile: str) -> int:
 
 
 def patch_linpack(bin_path: str) -> int:
+    logger.info("patching linpack binary located in %s", bin_path)
+
     with open(bin_path, "rb") as file:
         file_bytes = file.read()
 
@@ -34,6 +42,8 @@ def patch_linpack(bin_path: str) -> int:
     matches = [
         (match.start(), match.group()) for match in re.finditer("e8f230", file_hex_string) if match.start() % 2 == 0
     ]
+
+    logger.debug("matches: %i", len(matches))
 
     # there should be one and only one match else quit
     if len(matches) != 1:
@@ -51,6 +61,8 @@ def patch_linpack(bin_path: str) -> int:
 
 
 def main() -> int:
+    logging.basicConfig(format="[%(name)s] %(levelname)s: %(message)s", level=logging.INFO)
+
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
@@ -66,10 +78,13 @@ def main() -> int:
 
     build_directory = "/tmp/building"
 
+    logger.info("reading urls.json")
+
     with open("urls.json", encoding="utf-8") as fp:
         urls = json.load(fp)
 
     # make temp folder for building
+    logger.info("creating temp folder %s", build_directory)
     os.makedirs(build_directory)
 
     # ================================
@@ -99,7 +114,8 @@ def main() -> int:
             ],
             check=True,
         )
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as e:
+        logging.exception("failed to extract %s, %s", porteus_iso, e)
         return 1
 
     # ===========================
@@ -107,13 +123,16 @@ def main() -> int:
     # ===========================
 
     # merge custom files with extracted iso
+    logging.info("merging custom files with extracted ISO")
     shutil.copytree("porteus", iso_contents, dirs_exist_ok=True)
 
     tools_folder = os.path.join(iso_contents, "porteus", "rootcopy", "root", "tools")
+    logging.debug("tools folder: %s", tools_folder)
 
     # =============
     # Setup Linpack
     # =============
+    logging.info("setting up Linpack")
 
     linpack_tgz = os.path.join(build_directory, "linpack.tgz")
 
@@ -127,6 +146,8 @@ def main() -> int:
 
     # find benchmarks folder as the folder name (e.g. "benchmarks_2024.0") is dynamic
     benchmarks_folder = glob(os.path.join(linpack_contents, "benchmarks*"))
+
+    logging.debug("benchmarks folder glob result: %s", benchmarks_folder)
 
     if len(benchmarks_folder) != 1:
         return 1
@@ -142,6 +163,7 @@ def main() -> int:
     # =============
     # Setup Prime95
     # =============
+    logging.info("setting up Prime95")
 
     prime95_tgz = os.path.join(build_directory, "prime95.tgz")
 
@@ -154,6 +176,7 @@ def main() -> int:
     # ================
     # Setup y-cruncher
     # ================
+    logging.info("setting up y-cruncher")
 
     ycruncher_txz = os.path.join(build_directory, "ycruncher.tar.xz")
 
@@ -168,6 +191,8 @@ def main() -> int:
     # version name changes in folder name (e.g. "y-cruncher v0.8.3.9533")
     ycruncher_folder = glob(os.path.join(ycruncher_contents, "y-cruncher*-static"))
 
+    logging.debug("ycruncher folder folder glob result: %s", ycruncher_folder)
+
     if len(ycruncher_folder) != 1:
         return 1
 
@@ -179,6 +204,7 @@ def main() -> int:
     # ==================================
     # Setup Intel Memory Latency Checker
     # ==================================
+    logging.info("setting up Intel Memory Latency Checker")
 
     mlc_tgz = os.path.join(build_directory, "mlc.tgz")
 
@@ -195,6 +221,7 @@ def main() -> int:
     # =====================
     # Pack ISO and clean up
     # =====================
+    logging.info("packing ISO and clean up")
 
     try:
         subprocess.run(
@@ -206,7 +233,8 @@ def main() -> int:
             ],
             check=True,
         )
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError as e:
+        logging.exception("failed to extract %s, %s", porteus_iso, e)
         return 1
 
     shutil.rmtree(build_directory)
