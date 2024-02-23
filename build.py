@@ -1,5 +1,4 @@
 import argparse
-import hashlib
 import json
 import os
 import re
@@ -12,17 +11,10 @@ from glob import glob
 import requests
 
 
-def dl_file(url: str, outfile: str, sha256: str) -> int:
+def dl_file(url: str, outfile: str) -> int:
     response = requests.get(url, timeout=5)
 
     if not response.ok:
-        return 1
-
-    # check whether hashes match
-    hash_object = hashlib.sha256(response.content)
-    file_sha256 = hash_object.hexdigest()
-
-    if file_sha256 != sha256:
         return 1
 
     with open(outfile, "wb") as fp:
@@ -87,7 +79,7 @@ def main() -> int:
     # download porteus ISO
     porteus_iso = os.path.join(build_directory, "Porteus.iso")
 
-    if dl_file(urls["porteus"]["url"], porteus_iso, urls["porteus"]["sha256"]) != 0:
+    if dl_file(urls["porteus"]["url"], porteus_iso) != 0:
         return 1
 
     # extract ISO contents to iso_contents folder
@@ -125,7 +117,7 @@ def main() -> int:
 
     linpack_tgz = os.path.join(build_directory, "linpack.tgz")
 
-    if dl_file(urls["linpack"]["url"], linpack_tgz, urls["linpack"]["sha256"]) != 0:
+    if dl_file(urls["linpack"]["url"], linpack_tgz) != 0:
         return 1
 
     linpack_contents = os.path.join(build_directory, "linpack")
@@ -153,7 +145,7 @@ def main() -> int:
 
     prime95_tgz = os.path.join(build_directory, "prime95.tgz")
 
-    if dl_file(urls["prime95"]["url"], prime95_tgz, urls["prime95"]["sha256"]) != 0:
+    if dl_file(urls["prime95"]["url"], prime95_tgz) != 0:
         return 1
 
     with tarfile.open(prime95_tgz, "r:gz") as tar_file:
@@ -165,7 +157,7 @@ def main() -> int:
 
     ycruncher_txz = os.path.join(build_directory, "ycruncher.tar.xz")
 
-    if dl_file(urls["ycruncher"]["url"], ycruncher_txz, urls["ycruncher"]["sha256"]) != 0:
+    if dl_file(urls["ycruncher"]["url"], ycruncher_txz) != 0:
         return 1
 
     ycruncher_contents = os.path.join(build_directory, "ycruncher")
@@ -190,7 +182,7 @@ def main() -> int:
 
     mlc_tgz = os.path.join(build_directory, "mlc.tgz")
 
-    if dl_file(urls["imlc"]["url"], mlc_tgz, urls["imlc"]["sha256"]) != 0:
+    if dl_file(urls["imlc"]["url"], mlc_tgz) != 0:
         return 1
 
     imlc_contents = os.path.join(build_directory, "imlc")
