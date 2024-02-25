@@ -32,7 +32,7 @@ python build.py
 - [Linpack](#linpack)
 - [Prime95](#prime95)
 - [y-cruncher](#y-cruncher)
-- [Intel® Memory Latency Checker (Intel® MLC)](#intel®-memory-latency-checker-intel®-mlc)
+- [Intel Memory Latency Checker (Intel MLC)](#intel-memory-latency-checker-intel-mlc)
 
 ## Display StresKit Help Message
 
@@ -140,7 +140,7 @@ Usage:
 ycruncher
 ```
 
-## [Intel® Memory Latency Checker (Intel® MLC)](https://www.intel.com/content/www/us/en/developer/articles/tool/intelr-memory-latency-checker.html)
+## [Intel Memory Latency Checker (Intel MLC)](https://www.intel.com/content/www/us/en/developer/articles/tool/intelr-memory-latency-checker.html)
 
 Usage:
 
