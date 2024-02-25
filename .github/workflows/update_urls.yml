@@ -1,0 +1,33 @@
+name: Update URLs
+run-name: Update URLs
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.12.1
+
+      # runs script to check and update urls.json
+      # script should exit 1 if there are no updates
+      # or set variable for next step "if" expression
+      # - name: Check for URL updates
+      #   run: python3 <script>
+
+      - name: Update urls.json
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: Update URLs
+          file_pattern: urls.json
