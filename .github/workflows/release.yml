@@ -18,6 +18,11 @@ on:
         default: false
         type: boolean
 
+  workflow_run:
+    workflows: [Update URLs]
+    types:
+      - completed
+
 permissions:
   contents: write
 
