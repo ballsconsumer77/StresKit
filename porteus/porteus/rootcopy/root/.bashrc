@@ -1,7 +1,7 @@
 alias skhelp='cat /etc/issue'
 
 linpack() {
-    (cd /root/tools/linpack && ./runme_xeon64.sh "$@")
+    (cd /root/tools/linpack && bash ./runme_xeon64.sh "$@")
 }
 
 prime95() {
