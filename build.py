@@ -15,7 +15,7 @@ logger = logging.getLogger("CLI")
 
 
 def dl_file(url: str, outfile: str) -> int:
-    logging.info("downloading %s to %s", url, outfile)
+    logger.info("downloading %s to %s", url, outfile)
 
     response = requests.get(url, timeout=5)
 
@@ -115,7 +115,7 @@ def main() -> int:
             check=True,
         )
     except subprocess.CalledProcessError as e:
-        logging.exception("failed to extract %s, %s", porteus_iso, e)
+        logger.exception("failed to extract %s, %s", porteus_iso, e)
         return 1
 
     # ===========================
@@ -123,16 +123,16 @@ def main() -> int:
     # ===========================
 
     # merge custom files with extracted iso
-    logging.info("merging custom files with extracted ISO")
+    logger.info("merging custom files with extracted ISO")
     shutil.copytree("porteus", iso_contents, dirs_exist_ok=True)
 
     tools_folder = os.path.join(iso_contents, "porteus", "rootcopy", "root", "tools")
-    logging.debug("tools folder: %s", tools_folder)
+    logger.debug("tools folder: %s", tools_folder)
 
     # =============
     # Setup Linpack
     # =============
-    logging.info("setting up Linpack")
+    logger.info("setting up Linpack")
 
     linpack_tgz = os.path.join(build_directory, "linpack.tgz")
 
@@ -147,7 +147,7 @@ def main() -> int:
     # find benchmarks folder as the folder name (e.g. "benchmarks_2024.0") is dynamic
     benchmarks_folder = glob(os.path.join(linpack_contents, "benchmarks*"))
 
-    logging.debug("benchmarks folder glob result: %s", benchmarks_folder)
+    logger.debug("benchmarks folder glob result: %s", benchmarks_folder)
 
     if len(benchmarks_folder) != 1:
         return 1
@@ -163,7 +163,7 @@ def main() -> int:
     # =============
     # Setup Prime95
     # =============
-    logging.info("setting up Prime95")
+    logger.info("setting up Prime95")
 
     prime95_tgz = os.path.join(build_directory, "prime95.tgz")
 
@@ -176,7 +176,7 @@ def main() -> int:
     # ================
     # Setup y-cruncher
     # ================
-    logging.info("setting up y-cruncher")
+    logger.info("setting up y-cruncher")
 
     ycruncher_txz = os.path.join(build_directory, "ycruncher.tar.xz")
 
@@ -191,7 +191,7 @@ def main() -> int:
     # version name changes in folder name (e.g. "y-cruncher v0.8.3.9533")
     ycruncher_folder = glob(os.path.join(ycruncher_contents, "y-cruncher*-static"))
 
-    logging.debug("ycruncher folder folder glob result: %s", ycruncher_folder)
+    logger.debug("ycruncher folder folder glob result: %s", ycruncher_folder)
 
     if len(ycruncher_folder) != 1:
         return 1
@@ -204,7 +204,7 @@ def main() -> int:
     # ==================================
     # Setup Intel Memory Latency Checker
     # ==================================
-    logging.info("setting up Intel Memory Latency Checker")
+    logger.info("setting up Intel Memory Latency Checker")
 
     mlc_tgz = os.path.join(build_directory, "mlc.tgz")
 
@@ -221,7 +221,7 @@ def main() -> int:
     # =====================
     # Pack ISO and clean up
     # =====================
-    logging.info("packing ISO and clean up")
+    logger.info("packing ISO and clean up")
 
     try:
         subprocess.run(
@@ -234,7 +234,7 @@ def main() -> int:
             check=True,
         )
     except subprocess.CalledProcessError as e:
-        logging.exception("failed to extract %s, %s", porteus_iso, e)
+        logger.exception("failed to extract %s, %s", porteus_iso, e)
         return 1
 
     shutil.rmtree(build_directory)
