@@ -1,4 +1,4 @@
-alias skhelp='cat /etc/issue'
+alias skhelp='cat /root/.skhelp'
 
 linpack() {
     (cd /root/tools/linpack && bash ./runme_xeon64.sh "$@")
