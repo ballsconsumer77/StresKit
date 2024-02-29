@@ -89,6 +89,12 @@ To only view ``coretemp-isa-0000``, you would type:
 watch sensors coretemp-isa-0000
 ```
 
+Another useful command can be displaying the CPU frequency with the command below:
+
+```bash
+watch "sensors && cat /proc/cpuinfo | grep MHz"
+```
+
 ## Viewing Large Outputs
 
 Scrolling in Porteus is a bit tedious. For this reason, you can write stdout to a file while viewing the output simultaneously with the ``tee`` command. This also allows you to back up the output on a USB drive if needed which can be useful for other purposes such as saving them for later or comparing results.

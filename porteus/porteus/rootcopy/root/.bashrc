@@ -1,9 +1,5 @@
 alias skhelp='cat /root/.skhelp'
 
-sensors() {
-    (sensors "$@" && cat /proc/cpuinfo | grep Mhz)
-}
-
 linpack() {
     (cd /root/tools/linpack && bash ./runme_xeon64.sh "$@")
 }
