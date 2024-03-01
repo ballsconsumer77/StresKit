@@ -145,7 +145,7 @@ def main() -> int:
     logger.info("merging custom files with extracted ISO")
     shutil.copytree("porteus", iso_contents, dirs_exist_ok=True)
 
-    tools_folder = os.path.join(iso_contents, "porteus", "rootcopy", "root", "tools")
+    tools_folder = os.path.join(iso_contents, "porteus", "rootcopy", "usr", "local", "tools")
     logger.debug("tools folder: %s", tools_folder)
 
     # =============
