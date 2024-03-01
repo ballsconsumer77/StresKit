@@ -159,6 +159,8 @@ mlc
 
 Usage:
 
+This is an alias for ``stressapptest`` so use it as you normally would with CLI arguments.
+
 ```bash
 gsat
 ```
