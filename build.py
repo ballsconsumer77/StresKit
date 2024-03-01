@@ -78,9 +78,23 @@ def main() -> int:
         default="UNKNOWN",
     )
 
+    parser.add_argument(
+        "--clear_binary_cache",
+        help="clears cache which forces a re-download of all binaries",
+        action="store_true",
+    )
+
     args = parser.parse_args()
 
     build_directory = "/tmp/building"
+    binary_cache = "/tmp/binary_cache"
+
+    if args.clear_binary_cache:
+        if os.path.exists(binary_cache):
+            logger.info("clearing binary cache")
+            shutil.rmtree(binary_cache)
+        else:
+            logger.info("binary cache folder not found... continuing")
 
     logger.info("reading urls.json")
 
