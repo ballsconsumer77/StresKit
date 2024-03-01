@@ -15,6 +15,10 @@ logger = logging.getLogger("CLI")
 
 
 def dl_file(url: str, outfile: str) -> int:
+    if os.path.exists(outfile):
+        logger.info("cached binary %s found... skipping download", outfile)
+        return 0
+
     logger.info("downloading %s to %s", url, outfile)
 
     response = requests.get(url, timeout=5)
@@ -83,16 +87,17 @@ def main() -> int:
     with open("urls.json", encoding="utf-8") as fp:
         urls = json.load(fp)
 
-    # make temp folder for building
+    # make temp folder for building and cache
     logger.info("creating temp folder %s", build_directory)
     os.makedirs(build_directory)
+    os.makedirs(binary_cache, exist_ok=True)
 
     # ================================
     # Download and extract Porteus ISO
     # ================================
 
     # download porteus ISO
-    porteus_iso = os.path.join(build_directory, "Porteus.iso")
+    porteus_iso = os.path.join(binary_cache, "Porteus.iso")
 
     if dl_file(urls["porteus"]["url"], porteus_iso) != 0:
         return 1
@@ -134,7 +139,7 @@ def main() -> int:
     # =============
     logger.info("setting up Linpack")
 
-    linpack_tgz = os.path.join(build_directory, "linpack.tgz")
+    linpack_tgz = os.path.join(binary_cache, "linpack.tgz")
 
     if dl_file(urls["linpack"]["url"], linpack_tgz) != 0:
         return 1
@@ -165,7 +170,7 @@ def main() -> int:
     # =============
     logger.info("setting up Prime95")
 
-    prime95_tgz = os.path.join(build_directory, "prime95.tgz")
+    prime95_tgz = os.path.join(binary_cache, "prime95.tgz")
 
     if dl_file(urls["prime95"]["url"], prime95_tgz) != 0:
         return 1
@@ -178,7 +183,7 @@ def main() -> int:
     # ================
     logger.info("setting up y-cruncher")
 
-    ycruncher_txz = os.path.join(build_directory, "ycruncher.tar.xz")
+    ycruncher_txz = os.path.join(binary_cache, "ycruncher.tar.xz")
 
     if dl_file(urls["ycruncher"]["url"], ycruncher_txz) != 0:
         return 1
@@ -206,7 +211,7 @@ def main() -> int:
     # ==================================
     logger.info("setting up Intel Memory Latency Checker")
 
-    mlc_tgz = os.path.join(build_directory, "mlc.tgz")
+    mlc_tgz = os.path.join(binary_cache, "mlc.tgz")
 
     if dl_file(urls["imlc"]["url"], mlc_tgz) != 0:
         return 1
