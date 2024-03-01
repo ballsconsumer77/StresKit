@@ -237,6 +237,51 @@ def main() -> int:
 
     shutil.move(os.path.join(imlc_contents, "Linux", "mlc"), tools_folder)
 
+    # ==================================
+    # Setup stressapptest (GSAT)
+    # ==================================
+    logger.info("setting up tressapptest (GSAT)")
+
+    stressapptest_zip = os.path.join(binary_cache, "stressapptest.zip")
+
+    if dl_file(urls["stressapptest"]["url"], stressapptest_zip) != 0:
+        return 1
+
+    stressapptest_contents = os.path.join(build_directory, "stressapptest")
+
+    try:
+        subprocess.run(
+            ["7z", "x", stressapptest_zip, f"-o{stressapptest_contents}"],
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.exception("failed to extract %s, %s", stressapptest_zip, e)
+        return 1
+
+    stressapptest_master = os.path.join(stressapptest_contents, "stressapptest-master")
+
+    try:
+        subprocess.run(
+            ["bash", os.path.join(stressapptest_master, "configure")],
+            check=True,
+            cwd=stressapptest_master,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.exception("failed to execute configure script, %s", e)
+        return 1
+
+    try:
+        subprocess.run(
+            ["make"],
+            check=True,
+            cwd=stressapptest_master,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.exception("failed to run make %s", e)
+        return 1
+
+    shutil.move(os.path.join(stressapptest_master, "src", "stressapptest"), tools_folder)
+
     # =====================
     # Pack ISO and clean up
     # =====================

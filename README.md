@@ -33,6 +33,7 @@ python build.py
 - [Prime95](#prime95)
 - [y-cruncher](#y-cruncher)
 - [Intel Memory Latency Checker (Intel MLC)](#intel-memory-latency-checker-intel-mlc)
+- [stressapptest (GSAT)](#stressapptest-gsat)
 
 ## Display StresKit Help Message
 
@@ -152,4 +153,12 @@ Usage:
 
 ```bash
 mlc
+```
+
+## [stressapptest (GSAT)](https://github.com/stressapptest/stressapptest)
+
+Usage:
+
+```bash
+gsat
 ```

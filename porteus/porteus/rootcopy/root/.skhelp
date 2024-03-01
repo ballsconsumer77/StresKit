@@ -14,6 +14,7 @@
   prime95 ............ to run Prime95.
   ycruncher .......... to run y-cruncher.
   mlc ................ to run Intel Memory Latency Checker.
+  gsat ............... to run stressapptest (GSAT).
 
 [1;29mOther commands you may find useful:[0;29m
 

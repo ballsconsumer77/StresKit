@@ -13,5 +13,8 @@
   },
   "imlc": {
     "url": "https://downloadmirror.intel.com/793041/mlc_v3.11.tgz"
+  },
+  "stressapptest": {
+    "url": "https://github.com/stressapptest/stressapptest/archive/refs/heads/master.zip"
   }
 }

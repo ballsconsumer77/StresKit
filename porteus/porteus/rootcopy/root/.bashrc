@@ -15,3 +15,7 @@ ycruncher() {
 mlc() {
     (cd /root/tools && ./mlc "$@")
 }
+
+gsat() {
+    (cd /root/tools && ./stressapptest "$@")
+}
