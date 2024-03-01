@@ -1,3 +1,6 @@
+# prevent permission errors
+chmod -R +x /usr/local/tools
+
 alias skhelp='cat /usr/local/.skhelp'
 
 linpack() {
