@@ -37,7 +37,7 @@ python build.py
 
 ## Display StresKit Help Message
 
-Type ``skhelp`` to display the [pre-login help message](/porteus/porteus/rootcopy/usr/local/.skhelp) for a brief overview of the available commands.
+Type ``skhelp`` to display the [pre-login help message](/porteus/porteus/rootcopy/etc/issue) for a brief overview of the available commands.
 
 ## Switch TTY
 

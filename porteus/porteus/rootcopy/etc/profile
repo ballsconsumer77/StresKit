@@ -1,7 +1,7 @@
 # prevent permission errors
 chmod -R +x /usr/local/tools
 
-alias skhelp='cat /usr/local/.skhelp'
+alias skhelp='cat /etc/issue'
 
 linpack() {
     (cd /usr/local/tools/linpack && bash ./runme_xeon64.sh "$@")
