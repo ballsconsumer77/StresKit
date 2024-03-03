@@ -70,7 +70,7 @@ def main() -> int:
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "--image_version",
+        "--image-version",
         metavar="<version>",
         type=str,
         help='specify the image version (e.g. 1.0.0 for v1.0.0). \
@@ -79,7 +79,7 @@ def main() -> int:
     )
 
     parser.add_argument(
-        "--clear_binary_cache",
+        "--clear-binary-cache",
         help="clears cache which forces a re-download of all binaries",
         action="store_true",
     )

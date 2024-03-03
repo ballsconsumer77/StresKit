@@ -61,7 +61,7 @@ jobs:
           fi
 
       - name: Build ISO
-        run: python3 build.py --image_version ${{ steps.get-version.outputs.version }}
+        run: python3 build.py --image-version ${{ steps.get-version.outputs.version }}
 
       - name: Calculate SHA256
         run: |
