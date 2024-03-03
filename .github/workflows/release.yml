@@ -29,8 +29,10 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Install mkisofs
-        run: sudo apt-get install -y mkisofs
+      - name: Install packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mkisofs
 
       - name: Set up Python
         uses: actions/setup-python@v5
