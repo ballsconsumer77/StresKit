@@ -8,7 +8,7 @@
   "prime95": {
     "url": "https://www.mersenne.org/download/software/v30/30.8/p95v308b17.linux64.tar.gz"
   },
-  "ycruncher": {
+  "y-cruncher": {
     "url": "http://www.numberworld.org/y-cruncher/y-cruncher%20v0.8.4.9538-static.tar.xz"
   },
   "imlc": {

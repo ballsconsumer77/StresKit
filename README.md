@@ -126,7 +126,7 @@ Linpack is a stress-test based on the [Intel Math Kernel Library](https://www.in
 Usage:
 
 ```
-linpack [-m <gb>] [-s <samples>]
+linpack.sh [-m <gb>] [-s <samples>]
 ```
 
 - ``-m`` is the memory size in gigabytes. If not specified, free memory minus 100mb will be used
@@ -137,7 +137,7 @@ linpack [-m <gb>] [-s <samples>]
 Usage:
 
 ```bash
-prime95
+mprime
 ```
 
 ## [y-cruncher](http://www.numberworld.org/y-cruncher)
@@ -145,7 +145,7 @@ prime95
 Usage:
 
 ```bash
-ycruncher
+y-cruncher
 ```
 
 ## [Intel Memory Latency Checker (Intel MLC)](https://www.intel.com/content/www/us/en/developer/articles/tool/intelr-memory-latency-checker.html)
@@ -160,10 +160,8 @@ mlc
 
 Usage:
 
-This is an alias for ``stressapptest`` so use it as you normally would with CLI arguments.
-
 ```bash
-gsat
+stressapptest
 ```
 
 ## [s-tui](https://github.com/amanusk/s-tui)
@@ -171,5 +169,5 @@ gsat
 Usage:
 
 ```bash
-stui
+s-tui
 ```

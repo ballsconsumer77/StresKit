@@ -1,28 +1,11 @@
 # prevent permission errors
 chmod -R +x /usr/local/tools
 
+# add tools to path
+export PATH="$PATH:/usr/local/tools"
+export PATH="$PATH:/usr/local/tools/linpack"
+export PATH="$PATH:/usr/local/tools/prime95"
+export PATH="$PATH:/usr/local/tools/ycruncher"
+
+# create alias to display help message
 alias skhelp='cat /etc/issue'
-
-linpack() {
-    (cd /usr/local/tools/linpack && bash ./runme_xeon64.sh "$@")
-}
-
-prime95() {
-    (cd /usr/local/tools/prime95 && ./mprime "$@")
-}
-
-ycruncher() {
-    (cd /usr/local/tools/ycruncher && ./y-cruncher "$@")
-}
-
-mlc() {
-    (cd /usr/local/tools && ./mlc "$@")
-}
-
-gsat() {
-    (cd /usr/local/tools && ./stressapptest "$@")
-}
-
-stui() {
-    (cd /usr/local/tools && ./s-tui "$@")
-}

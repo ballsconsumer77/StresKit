@@ -199,7 +199,7 @@ def main() -> int:
 
     ycruncher_txz = os.path.join(binary_cache, "ycruncher.tar.xz")
 
-    if dl_file(urls["ycruncher"]["url"], ycruncher_txz) != 0:
+    if dl_file(urls["y-cruncher"]["url"], ycruncher_txz) != 0:
         return 1
 
     ycruncher_contents = os.path.join(build_directory, "ycruncher")

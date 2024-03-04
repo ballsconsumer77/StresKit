@@ -11,11 +11,11 @@
   Ctrl+Alt+F# ........ to switch to a different TTY (e.g. Ctrl+Alt+F2 for TTY 2).
   watch sensors ...... to display and refresh sensor information.
   linpack ............ to run Linpack. -m <gb> and -s <samples> are optional.
-  prime95 ............ to run Prime95.
-  ycruncher .......... to run y-cruncher.
+  mprime ............. to run Prime95.
+  y-cruncher ......... to run y-cruncher.
   mlc ................ to run Intel Memory Latency Checker.
-  gsat ............... to run stressapptest (GSAT).
-  stui .............. to run s-tui.
+  stressapptest ...... to run stressapptest (GSAT).
+  s-tui .............. to run s-tui.
 
 [1;29mOther commands you may find useful:[0;29m
 
