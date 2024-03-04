@@ -240,7 +240,7 @@ def main() -> int:
     # ==================================
     # Setup stressapptest (GSAT)
     # ==================================
-    logger.info("setting up tressapptest (GSAT)")
+    logger.info("setting up stressapptest (GSAT)")
 
     stressapptest_zip = os.path.join(binary_cache, "stressapptest.zip")
 
