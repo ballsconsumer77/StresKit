@@ -15,6 +15,7 @@
   ycruncher .......... to run y-cruncher.
   mlc ................ to run Intel Memory Latency Checker.
   gsat ............... to run stressapptest (GSAT).
+  stui .............. to run s-tui.
 
 [1;29mOther commands you may find useful:[0;29m
 

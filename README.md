@@ -34,6 +34,7 @@ python build.py
 - [y-cruncher](#y-cruncher)
 - [Intel Memory Latency Checker (Intel MLC)](#intel-memory-latency-checker-intel-mlc)
 - [stressapptest (GSAT)](#stressapptest-gsat)
+- [s-tui](#s-tui)
 
 ## Display StresKit Help Message
 
@@ -45,7 +46,7 @@ In cases where you need to multitask but can't interact with the main terminal s
 
 ## Sensors
 
-Type ``watch sensors`` to view sensors. You can view sensors while a stress-test is running by [switching to another TTY](#switch-tty).
+Type ``watch sensors`` to view sensors. [s-tui](#s-tui) is also an available option. You can view sensors while a stress-test is running by [switching to another TTY](#switch-tty).
 
 To monitor a specific sensor, specify the name of the sensor in the command ``watch sensors <sensor_name>``. See example below.
 
@@ -163,4 +164,12 @@ This is an alias for ``stressapptest`` so use it as you normally would with CLI 
 
 ```bash
 gsat
+```
+
+## [s-tui](https://github.com/amanusk/s-tui)
+
+Usage:
+
+```bash
+stui
 ```

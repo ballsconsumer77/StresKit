@@ -22,3 +22,7 @@ mlc() {
 gsat() {
     (cd /usr/local/tools && ./stressapptest "$@")
 }
+
+stui() {
+    (cd /usr/local/tools && ./s-tui "$@")
+}

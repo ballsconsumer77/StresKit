@@ -16,5 +16,8 @@
   },
   "stressapptest": {
     "url": "https://github.com/stressapptest/stressapptest/archive/refs/heads/master.zip"
+  },
+  "s-tui": {
+    "url": "https://github.com/amanusk/s-tui/archive/refs/heads/master.zip"
   }
 }

@@ -282,6 +282,45 @@ def main() -> int:
 
     shutil.move(os.path.join(stressapptest_master, "src", "stressapptest"), tools_folder)
 
+    # ==================================
+    # Setup s-tui
+    # ==================================
+    logger.info("setting up s-tui")
+
+    stui_zip = os.path.join(binary_cache, "s-tui.zip")
+
+    if dl_file(urls["s-tui"]["url"], stui_zip) != 0:
+        return 1
+
+    stui_contents = os.path.join(build_directory, "s-tui")
+
+    try:
+        subprocess.run(
+            ["7z", "x", stui_zip, f"-o{stui_contents}"],
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.exception("failed to extract %s, %s", stui_zip, e)
+        return 1
+
+    stui_master = os.path.join(stui_contents, "s-tui-master")
+
+    try:
+        subprocess.run(
+            ["make"],
+            check=True,
+            cwd=stui_master,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.exception("failed to run make %s", e)
+
+        # there is an undefined rule in the makefile which results in a non-zero exit code
+        # but the build doesn't fail so there is no need to return
+
+        # return 1
+
+    shutil.move(os.path.join(stui_master, "s-tui"), tools_folder)
+
     # =====================
     # Pack ISO and clean up
     # =====================
