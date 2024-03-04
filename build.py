@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import json
 import logging
 import os
@@ -62,6 +63,16 @@ def patch_linpack(bin_path: str) -> int:
         file.write(file_bytes)
 
     return 0
+
+
+def calculate_sha256(file_path: str) -> str:
+    sha256_hash = hashlib.sha256()
+
+    with open(file_path, "rb") as file:
+        for byte_block in iter(lambda: file.read(4096), b""):
+            sha256_hash.update(byte_block)
+
+    return sha256_hash.hexdigest()
 
 
 def main() -> int:
@@ -343,13 +354,16 @@ def main() -> int:
     # =====================
     logger.info("packing ISO and clean up")
 
+    iso_fname = f"StresKit-v{args.image_version}-x86_64.iso"
+    stresskit_iso = os.path.join(os.path.dirname(os.path.abspath(__file__)), iso_fname)
+
     try:
         subprocess.run(
             [
                 "bash",
                 os.path.join(iso_contents, "porteus", "make_iso.sh"),
                 # output ISO path
-                os.path.join(os.path.dirname(os.path.abspath(__file__)), f"StresKit-v{args.image_version}-x86_64.iso"),
+                stresskit_iso,
             ],
             check=True,
         )
@@ -358,6 +372,13 @@ def main() -> int:
         return 1
 
     shutil.rmtree(build_directory)
+
+    with open("sha256.txt", "w", encoding="utf-8") as fp:
+        for file in (stresskit_iso,):
+            sha256 = calculate_sha256(file)
+            fname = os.path.basename(file)
+
+            fp.write(f"{fname} {sha256}")
 
     return 0
 

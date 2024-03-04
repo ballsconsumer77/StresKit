@@ -63,15 +63,6 @@ jobs:
       - name: Build ISO
         run: python3 build.py --image-version ${{ steps.get-version.outputs.version }}
 
-      - name: Calculate SHA256
-        run: |
-          files=("StresKit-v${{ steps.get-version.outputs.version }}-x86_64.iso")
-
-          for file in "${files[@]}"; do
-              hash=$(sha256sum "$file" | awk '{print $1}')
-              echo "$file $hash" >> "sha256.txt"
-          done
-
       - name: Create release
         uses: ncipollo/release-action@v1
         with:
