@@ -35,6 +35,7 @@ python build.py
 - [Intel Memory Latency Checker (Intel MLC)](#intel-memory-latency-checker-intel-mlc)
 - [stressapptest (GSAT)](#stressapptest-gsat)
 - [s-tui](#s-tui)
+- [FIRESTARTER](#firestarter)
 
 ## Display StresKit Help Message
 
@@ -170,4 +171,12 @@ Usage:
 
 ```bash
 s-tui
+```
+
+## [FIRESTARTER](https://github.com/tud-zih-energy/FIRESTARTER)
+
+Usage:
+
+```bash
+FIRESTARTER
 ```

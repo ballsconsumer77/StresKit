@@ -16,6 +16,7 @@
   mlc ................ to run Intel Memory Latency Checker.
   stressapptest ...... to run stressapptest (GSAT).
   s-tui .............. to run s-tui.
+  FIRESTARTER ........ to run firestarter.
 
 [1;29mOther commands you may find useful:[0;29m
 

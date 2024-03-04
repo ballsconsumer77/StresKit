@@ -321,6 +321,23 @@ def main() -> int:
 
     shutil.move(os.path.join(stui_master, "s-tui"), tools_folder)
 
+    # ==================================
+    # Setup FIRESTARTER
+    # ==================================
+    logger.info("setting up FIRESTARTER")
+
+    firestarter_tgz = os.path.join(binary_cache, "firestarter.tgz")
+
+    if dl_file(urls["firestarter"]["url"], firestarter_tgz) != 0:
+        return 1
+
+    firestarter_contents = os.path.join(build_directory, "firestarter")
+
+    with tarfile.open(firestarter_tgz, "r:gz") as tar_file:
+        tar_file.extractall(firestarter_contents)
+
+    shutil.move(os.path.join(firestarter_contents, "FIRESTARTER"), tools_folder)
+
     # =====================
     # Pack ISO and clean up
     # =====================

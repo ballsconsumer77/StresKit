@@ -19,5 +19,8 @@
   },
   "s-tui": {
     "url": "https://github.com/amanusk/s-tui/archive/refs/heads/master.zip"
+  },
+  "firestarter": {
+    "url": "https://github.com/tud-zih-energy/FIRESTARTER/releases/download/v2.1/FIRESTARTER_2.1.tar.gz"
   }
 }
