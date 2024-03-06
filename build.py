@@ -248,9 +248,9 @@ def main() -> int:
 
     shutil.move(os.path.join(imlc_contents, "Linux", "mlc"), tools_folder)
 
-    # ==================================
+    # ==========================
     # Setup stressapptest (GSAT)
-    # ==================================
+    # ==========================
     logger.info("setting up stressapptest (GSAT)")
 
     stressapptest_zip = os.path.join(binary_cache, "stressapptest.zip")
@@ -293,9 +293,9 @@ def main() -> int:
 
     shutil.move(os.path.join(stressapptest_master, "src", "stressapptest"), tools_folder)
 
-    # ==================================
+    # ===========
     # Setup s-tui
-    # ==================================
+    # ===========
     logger.info("setting up s-tui")
 
     stui_zip = os.path.join(binary_cache, "s-tui.zip")
@@ -332,9 +332,9 @@ def main() -> int:
 
     shutil.move(os.path.join(stui_master, "s-tui"), tools_folder)
 
-    # ==================================
+    # =================
     # Setup FIRESTARTER
-    # ==================================
+    # =================
     logger.info("setting up FIRESTARTER")
 
     firestarter_tgz = os.path.join(binary_cache, "firestarter.tgz")
