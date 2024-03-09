@@ -3,6 +3,8 @@ run-name: Create release
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "urls.json"
 
