@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import json
 import logging
 import os
@@ -15,7 +16,11 @@ logger = logging.getLogger("CLI")
 
 
 def dl_file(url: str, outfile: str) -> int:
-    logging.info("downloading %s to %s", url, outfile)
+    if os.path.exists(outfile):
+        logger.info("cached binary %s found... skipping download", outfile)
+        return 0
+
+    logger.info("downloading %s to %s", url, outfile)
 
     response = requests.get(url, timeout=5)
 
@@ -60,13 +65,23 @@ def patch_linpack(bin_path: str) -> int:
     return 0
 
 
+def calculate_sha256(file_path: str) -> str:
+    sha256_hash = hashlib.sha256()
+
+    with open(file_path, "rb") as file:
+        for byte_block in iter(lambda: file.read(4096), b""):
+            sha256_hash.update(byte_block)
+
+    return sha256_hash.hexdigest()
+
+
 def main() -> int:
     logging.basicConfig(format="[%(name)s] %(levelname)s: %(message)s", level=logging.INFO)
 
     parser = argparse.ArgumentParser()
 
     parser.add_argument(
-        "--image_version",
+        "--image-version",
         metavar="<version>",
         type=str,
         help='specify the image version (e.g. 1.0.0 for v1.0.0). \
@@ -74,25 +89,40 @@ def main() -> int:
         default="UNKNOWN",
     )
 
+    parser.add_argument(
+        "--clear-binary-cache",
+        help="clears cache which forces a re-download of all binaries",
+        action="store_true",
+    )
+
     args = parser.parse_args()
 
     build_directory = "/tmp/building"
+    binary_cache = "/tmp/binary_cache"
+
+    if args.clear_binary_cache:
+        if os.path.exists(binary_cache):
+            logger.info("clearing binary cache")
+            shutil.rmtree(binary_cache)
+        else:
+            logger.info("binary cache folder not found... continuing")
 
     logger.info("reading urls.json")
 
     with open("urls.json", encoding="utf-8") as fp:
         urls = json.load(fp)
 
-    # make temp folder for building
+    # make temp folder for building and cache
     logger.info("creating temp folder %s", build_directory)
     os.makedirs(build_directory)
+    os.makedirs(binary_cache, exist_ok=True)
 
     # ================================
     # Download and extract Porteus ISO
     # ================================
 
     # download porteus ISO
-    porteus_iso = os.path.join(build_directory, "Porteus.iso")
+    porteus_iso = os.path.join(binary_cache, "Porteus.iso")
 
     if dl_file(urls["porteus"]["url"], porteus_iso) != 0:
         return 1
@@ -115,7 +145,7 @@ def main() -> int:
             check=True,
         )
     except subprocess.CalledProcessError as e:
-        logging.exception("failed to extract %s, %s", porteus_iso, e)
+        logger.exception("failed to extract %s, %s", porteus_iso, e)
         return 1
 
     # ===========================
@@ -123,18 +153,18 @@ def main() -> int:
     # ===========================
 
     # merge custom files with extracted iso
-    logging.info("merging custom files with extracted ISO")
+    logger.info("merging custom files with extracted ISO")
     shutil.copytree("porteus", iso_contents, dirs_exist_ok=True)
 
-    tools_folder = os.path.join(iso_contents, "porteus", "rootcopy", "root", "tools")
-    logging.debug("tools folder: %s", tools_folder)
+    tools_folder = os.path.join(iso_contents, "porteus", "rootcopy", "usr", "local", "tools")
+    logger.debug("tools folder: %s", tools_folder)
 
     # =============
     # Setup Linpack
     # =============
-    logging.info("setting up Linpack")
+    logger.info("setting up Linpack")
 
-    linpack_tgz = os.path.join(build_directory, "linpack.tgz")
+    linpack_tgz = os.path.join(binary_cache, "linpack.tgz")
 
     if dl_file(urls["linpack"]["url"], linpack_tgz) != 0:
         return 1
@@ -147,7 +177,7 @@ def main() -> int:
     # find benchmarks folder as the folder name (e.g. "benchmarks_2024.0") is dynamic
     benchmarks_folder = glob(os.path.join(linpack_contents, "benchmarks*"))
 
-    logging.debug("benchmarks folder glob result: %s", benchmarks_folder)
+    logger.debug("benchmarks folder glob result: %s", benchmarks_folder)
 
     if len(benchmarks_folder) != 1:
         return 1
@@ -163,9 +193,9 @@ def main() -> int:
     # =============
     # Setup Prime95
     # =============
-    logging.info("setting up Prime95")
+    logger.info("setting up Prime95")
 
-    prime95_tgz = os.path.join(build_directory, "prime95.tgz")
+    prime95_tgz = os.path.join(binary_cache, "prime95.tgz")
 
     if dl_file(urls["prime95"]["url"], prime95_tgz) != 0:
         return 1
@@ -176,11 +206,11 @@ def main() -> int:
     # ================
     # Setup y-cruncher
     # ================
-    logging.info("setting up y-cruncher")
+    logger.info("setting up y-cruncher")
 
-    ycruncher_txz = os.path.join(build_directory, "ycruncher.tar.xz")
+    ycruncher_txz = os.path.join(binary_cache, "ycruncher.tar.xz")
 
-    if dl_file(urls["ycruncher"]["url"], ycruncher_txz) != 0:
+    if dl_file(urls["y-cruncher"]["url"], ycruncher_txz) != 0:
         return 1
 
     ycruncher_contents = os.path.join(build_directory, "ycruncher")
@@ -191,7 +221,7 @@ def main() -> int:
     # version name changes in folder name (e.g. "y-cruncher v0.8.3.9533")
     ycruncher_folder = glob(os.path.join(ycruncher_contents, "y-cruncher*-static"))
 
-    logging.debug("ycruncher folder folder glob result: %s", ycruncher_folder)
+    logger.debug("ycruncher folder folder glob result: %s", ycruncher_folder)
 
     if len(ycruncher_folder) != 1:
         return 1
@@ -204,9 +234,9 @@ def main() -> int:
     # ==================================
     # Setup Intel Memory Latency Checker
     # ==================================
-    logging.info("setting up Intel Memory Latency Checker")
+    logger.info("setting up Intel Memory Latency Checker")
 
-    mlc_tgz = os.path.join(build_directory, "mlc.tgz")
+    mlc_tgz = os.path.join(binary_cache, "mlc.tgz")
 
     if dl_file(urls["imlc"]["url"], mlc_tgz) != 0:
         return 1
@@ -218,10 +248,114 @@ def main() -> int:
 
     shutil.move(os.path.join(imlc_contents, "Linux", "mlc"), tools_folder)
 
+    # ==========================
+    # Setup stressapptest (GSAT)
+    # ==========================
+    logger.info("setting up stressapptest (GSAT)")
+
+    stressapptest_zip = os.path.join(binary_cache, "stressapptest.zip")
+
+    if dl_file(urls["stressapptest"]["url"], stressapptest_zip) != 0:
+        return 1
+
+    stressapptest_contents = os.path.join(build_directory, "stressapptest")
+
+    try:
+        subprocess.run(
+            ["7z", "x", stressapptest_zip, f"-o{stressapptest_contents}"],
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.exception("failed to extract %s, %s", stressapptest_zip, e)
+        return 1
+
+    stressapptest_master = os.path.join(stressapptest_contents, "stressapptest-master")
+
+    try:
+        subprocess.run(
+            ["bash", os.path.join(stressapptest_master, "configure")],
+            check=True,
+            cwd=stressapptest_master,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.exception("failed to execute configure script, %s", e)
+        return 1
+
+    try:
+        subprocess.run(
+            ["make"],
+            check=True,
+            cwd=stressapptest_master,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.exception("failed to run make %s", e)
+        return 1
+
+    shutil.move(os.path.join(stressapptest_master, "src", "stressapptest"), tools_folder)
+
+    # ===========
+    # Setup s-tui
+    # ===========
+    logger.info("setting up s-tui")
+
+    stui_zip = os.path.join(binary_cache, "s-tui.zip")
+
+    if dl_file(urls["s-tui"]["url"], stui_zip) != 0:
+        return 1
+
+    stui_contents = os.path.join(build_directory, "s-tui")
+
+    try:
+        subprocess.run(
+            ["7z", "x", stui_zip, f"-o{stui_contents}"],
+            check=True,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.exception("failed to extract %s, %s", stui_zip, e)
+        return 1
+
+    stui_master = os.path.join(stui_contents, "s-tui-master")
+
+    try:
+        subprocess.run(
+            ["make"],
+            check=True,
+            cwd=stui_master,
+        )
+    except subprocess.CalledProcessError as e:
+        logger.exception("failed to run make %s", e)
+
+        # there is an undefined rule in the makefile which results in a non-zero exit code
+        # but the build doesn't fail so there is no need to return
+
+        # return 1
+
+    shutil.move(os.path.join(stui_master, "s-tui"), tools_folder)
+
+    # =================
+    # Setup FIRESTARTER
+    # =================
+    logger.info("setting up FIRESTARTER")
+
+    firestarter_tgz = os.path.join(binary_cache, "firestarter.tgz")
+
+    if dl_file(urls["firestarter"]["url"], firestarter_tgz) != 0:
+        return 1
+
+    firestarter_contents = os.path.join(build_directory, "firestarter")
+
+    with tarfile.open(firestarter_tgz, "r:gz") as tar_file:
+        tar_file.extractall(firestarter_contents)
+
+    shutil.move(os.path.join(firestarter_contents, "FIRESTARTER"), tools_folder)
+
     # =====================
     # Pack ISO and clean up
     # =====================
-    logging.info("packing ISO and clean up")
+    logger.info("packing ISO and clean up")
+
+    iso_fname = f"StresKit-v{args.image_version}-x86_64.iso"
+    stresskit_iso = os.path.join(os.path.dirname(os.path.abspath(__file__)), iso_fname)
 
     try:
         subprocess.run(
@@ -229,15 +363,22 @@ def main() -> int:
                 "bash",
                 os.path.join(iso_contents, "porteus", "make_iso.sh"),
                 # output ISO path
-                os.path.join(os.path.dirname(os.path.abspath(__file__)), f"StresKit-v{args.image_version}-x86_64.iso"),
+                stresskit_iso,
             ],
             check=True,
         )
     except subprocess.CalledProcessError as e:
-        logging.exception("failed to extract %s, %s", porteus_iso, e)
+        logger.exception("failed to extract %s, %s", porteus_iso, e)
         return 1
 
     shutil.rmtree(build_directory)
+
+    with open("sha256.txt", "w", encoding="utf-8") as fp:
+        for file in (stresskit_iso,):
+            sha256 = calculate_sha256(file)
+            fname = os.path.basename(file)
+
+            fp.write(f"{fname} {sha256}")
 
     return 0
 

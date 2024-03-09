@@ -1,10 +1,16 @@
-#!/bin/sh
+#!/bin/bash
 
 usage() {
     echo "Usage: $0 [-m <gb>] [-s <samples>]"
 }
 
 main() {
+    # cd to the directory of the script
+    cd "$(dirname "${BASH_SOURCE[0]}")" || {
+        echo "failed to cd to script directory"
+        return 1
+    }
+
     memory_arg=""
     samples_arg=""
 
@@ -19,12 +25,12 @@ main() {
         \?)
             echo "error: invalid option: -$OPTARG"
             usage
-            exit 1
+            return 1
             ;;
         :)
             echo "error: option -$OPTARG requires an argument"
             usage
-            exit 1
+            return 1
             ;;
         esac
     done

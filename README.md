@@ -9,7 +9,7 @@ Lightweight bootable ISO based on [Porteus](https://www.porteus.org) containing 
 ## Setup
 
 1. Download the latest [StresKit](https://github.com/amitxv/StresKit/releases) ISO and burn it to a USB with [Rufus](https://rufus.ie/en) then boot to it through UEFI. [Ventoy](https://www.ventoy.net/en/index.html) (use grub2 mode if normal mode doesn't work) is another popular option
-2. The login username is ``root`` and the password is ``toor``
+2. The login username is ``guest`` and the password is ``guest``
 3. After logging in, you can use the tools packaged in StresKit. See the [Usage](#usage) section for the available tools
 
 ## Building
@@ -32,7 +32,10 @@ python build.py
 - [Linpack](#linpack)
 - [Prime95](#prime95)
 - [y-cruncher](#y-cruncher)
-- [Intel® Memory Latency Checker (Intel® MLC)](#intel®-memory-latency-checker-intel®-mlc)
+- [Intel Memory Latency Checker (Intel MLC)](#intel-memory-latency-checker-intel-mlc)
+- [stressapptest (GSAT)](#stressapptest-gsat)
+- [s-tui](#s-tui)
+- [FIRESTARTER](#firestarter)
 
 ## Display StresKit Help Message
 
@@ -44,7 +47,7 @@ In cases where you need to multitask but can't interact with the main terminal s
 
 ## Sensors
 
-Type ``watch sensors`` to view sensors. You can view sensors while a stress-test is running by [switching to another TTY](#switch-tty).
+Type ``watch sensors`` to view sensors. [s-tui](#s-tui) is also an available option. You can view sensors while a stress-test is running by [switching to another TTY](#switch-tty).
 
 To monitor a specific sensor, specify the name of the sensor in the command ``watch sensors <sensor_name>``. See example below.
 
@@ -89,6 +92,12 @@ To only view ``coretemp-isa-0000``, you would type:
 watch sensors coretemp-isa-0000
 ```
 
+Another useful command can be displaying the CPU frequency with the command below:
+
+```bash
+watch "sensors && cat /proc/cpuinfo | grep MHz"
+```
+
 ## Viewing Large Outputs
 
 Scrolling in Porteus is a bit tedious. For this reason, you can write stdout to a file while viewing the output simultaneously with the ``tee`` command. This also allows you to back up the output on a USB drive if needed which can be useful for other purposes such as saving them for later or comparing results.
@@ -118,7 +127,7 @@ Linpack is a stress-test based on the [Intel Math Kernel Library](https://www.in
 Usage:
 
 ```
-linpack [-m <gb>] [-s <samples>]
+linpack.sh [-m <gb>] [-s <samples>]
 ```
 
 - ``-m`` is the memory size in gigabytes. If not specified, free memory minus 100mb will be used
@@ -129,7 +138,7 @@ linpack [-m <gb>] [-s <samples>]
 Usage:
 
 ```bash
-prime95
+mprime
 ```
 
 ## [y-cruncher](http://www.numberworld.org/y-cruncher)
@@ -137,13 +146,37 @@ prime95
 Usage:
 
 ```bash
-ycruncher
+y-cruncher
 ```
 
-## [Intel® Memory Latency Checker (Intel® MLC)](https://www.intel.com/content/www/us/en/developer/articles/tool/intelr-memory-latency-checker.html)
+## [Intel Memory Latency Checker (Intel MLC)](https://www.intel.com/content/www/us/en/developer/articles/tool/intelr-memory-latency-checker.html)
 
 Usage:
 
 ```bash
 mlc
+```
+
+## [stressapptest (GSAT)](https://github.com/stressapptest/stressapptest)
+
+Usage:
+
+```bash
+stressapptest
+```
+
+## [s-tui](https://github.com/amanusk/s-tui)
+
+Usage:
+
+```bash
+s-tui
+```
+
+## [FIRESTARTER](https://github.com/tud-zih-energy/FIRESTARTER)
+
+Usage:
+
+```bash
+FIRESTARTER
 ```
