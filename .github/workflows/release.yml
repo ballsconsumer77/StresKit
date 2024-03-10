@@ -3,6 +3,8 @@ run-name: Create release
 
 on:
   push:
+    branches:
+      - main
     paths:
       - "urls.json"
 
@@ -10,7 +12,6 @@ on:
     inputs:
       version:
         description: "Version of the ISO to build. This will be used for the tag and release name."
-        required: true
 
       pre-release:
         description: "Pre-release"
