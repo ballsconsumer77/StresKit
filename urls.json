@@ -1,15 +1,15 @@
 {
   "porteus": {
-    "url": "http://ftp.vim.org/ftp/os/Linux/distr/porteus/x86_64/Porteus-v5.01/Porteus-OPENBOX-v5.01-x86_64.iso"
+    "url": "http://ftp.vim.org/ftp/os/Linux/distr/porteus/x86_64/current/Porteus-OPENBOX-v5.01-x86_64.iso"
   },
   "linpack": {
     "url": "https://downloadmirror.intel.com/793598/l_onemklbench_p_2024.0.0_49515.tgz"
   },
   "prime95": {
-    "url": "https://www.mersenne.org/download/software/v30/30.8/p95v308b17.linux64.tar.gz"
+    "url": "https://www.mersenne.org/download/software/v30/30.19/p95v3019b13.linux64.tar.gz"
   },
   "y-cruncher": {
-    "url": "http://www.numberworld.org/y-cruncher/y-cruncher%20v0.8.4.9538-static.tar.xz"
+    "url": "https://github.com/Mysticial/y-cruncher/releases/download/v0.8.4.9538a/y-cruncher.v0.8.4.9538-static.tar.xz"
   },
   "imlc": {
     "url": "https://downloadmirror.intel.com/793041/mlc_v3.11.tgz"

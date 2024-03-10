@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
 
   # weekly workflow runs
-  # schedule:
-  #   - cron: "0 0 * * 1"
+  schedule:
+    - cron: "0 0 * * 0"
 
 permissions:
   contents: write
@@ -21,17 +21,26 @@ jobs:
         with:
           token: ${{ secrets.GH_TOKEN }}
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          python-version: 3.12.1
+          node-version: 20
+          cache: "npm"
+          cache-dependency-path: "updateURLs"
 
-      # runs script to check and update urls.json
-      # - name: Check for URL updates
-      #   run: python3 <script>
+      - name: Install dependencies
+        run: |
+          cd updateURLs
+          npm ci
+
+      - name: Check for URL updates
+        id: update-urls
+        run: |
+          cd updateURLs
+          node updateURLs.js
 
       - name: Update urls.json
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: Update URLs
+          commit_message: ${{ steps.update-urls.outputs.COMMIT_MESSAGE }}
           file_pattern: urls.json
