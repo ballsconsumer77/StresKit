@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      # step "Generate changlog" relies on "urls.json" being the only path specified here
+      # step "Generate changelog" relies on "urls.json" being the only path specified here
       - "urls.json"
 
   workflow_dispatch:
@@ -45,7 +45,7 @@ jobs:
         run: python -m pip install -r requirements.txt
 
         # uses commit message on urls.json push event for changelog
-      - name: Generate changlog
+      - name: Generate changelog
         id: generate-changelog
         run: |
           response=$(curl -s "https://api.github.com/repos/amitxv/StresKit2/commits")
