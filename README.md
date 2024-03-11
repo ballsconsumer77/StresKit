@@ -12,16 +12,6 @@ Lightweight bootable ISO based on [Porteus](https://www.porteus.org) containing 
 2. The login username is ``guest`` and the password is ``guest``
 3. After logging in, you can use the tools packaged in StresKit. See the [Usage](#usage) section for the available tools
 
-## Building
-
-The ``build.py`` script can be used to build the ISO. It is designed to run on [ubuntu-latest](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners) for GitHub actions, but you can use a Linux distro of your choice.
-
-```bash
-git clone https://github.com/amitxv/StresKit.git
-cd StresKit/
-python build.py
-```
-
 ## Usage
 
 - [Display StresKit Help Message](#display-streskit-help-message)
@@ -37,15 +27,15 @@ python build.py
 - [s-tui](#s-tui)
 - [FIRESTARTER](#firestarter)
 
-## Display StresKit Help Message
+### Display StresKit Help Message
 
 Type ``skhelp`` to display the [pre-login help message](/porteus/porteus/rootcopy/etc/issue) for a brief overview of the available commands.
 
-## Switch TTY
+### Switch TTY
 
 In cases where you need to multitask but can't interact with the main terminal such as wanting to view sensors while a stress-test is running, you can switch to another *virtual terminal* by pressing ``Ctrl+Alt+F2`` and complete your tasks on there. Switch back to TTY 1 by pressing ``Ctrl+Alt+F1``.
 
-## Sensors
+### Sensors
 
 Type ``watch sensors`` to view sensors. [s-tui](#s-tui) is also an available option. You can view sensors while a stress-test is running by [switching to another TTY](#switch-tty).
 
@@ -98,7 +88,7 @@ Another useful command can be displaying the CPU frequency with the command belo
 watch "sensors && cat /proc/cpuinfo | grep MHz"
 ```
 
-## Viewing Large Outputs
+### Viewing Large Outputs
 
 Scrolling in Porteus is a bit tedious. For this reason, you can write stdout to a file while viewing the output simultaneously with the ``tee`` command. This also allows you to back up the output on a USB drive if needed which can be useful for other purposes such as saving them for later or comparing results.
 
@@ -108,7 +98,7 @@ Scrolling in Porteus is a bit tedious. For this reason, you can write stdout to 
 
 Learn the basic syntax of ``vi`` by watching [this video](https://www.youtube.com/watch?v=vo2FXvPkcEA). Use ``vi output.txt`` to view the ``output.txt`` file at any given time.
 
-## Accessing Local Storage
+### Accessing Local Storage
 
 Sometimes you may want to access local storage whether it be the USB or your computer's drive.
 
@@ -120,7 +110,7 @@ ls /mnt/*
 
 You can ``ls`` each of them to identify which is the desired storage device if the name isn't obvious.
 
-## [Linpack](https://en.wikipedia.org/wiki/LINPACK_benchmarks)
+### [Linpack](https://en.wikipedia.org/wiki/LINPACK_benchmarks)
 
 Linpack is a stress-test based on the [Intel Math Kernel Library](https://www.intel.com/content/www/us/en/developer/tools/oneapi/onemkl.html#gs.4kgof5) which solves a dense system of linear equations. The binary has been openly patched to run on AMD CPUs.
 
@@ -133,7 +123,7 @@ linpack.sh [-m <gb>] [-s <samples>]
 - ``-m`` is the memory size in gigabytes. If not specified, free memory minus 100mb will be used
 - ``-s`` is the number of trials to run. If not specified, 100 trials will be executed
 
-## [Prime95](https://www.mersenne.org/download)
+### [Prime95](https://www.mersenne.org/download)
 
 Usage:
 
@@ -141,7 +131,7 @@ Usage:
 mprime
 ```
 
-## [y-cruncher](http://www.numberworld.org/y-cruncher)
+### [y-cruncher](http://www.numberworld.org/y-cruncher)
 
 Usage:
 
@@ -149,7 +139,7 @@ Usage:
 y-cruncher
 ```
 
-## [Intel Memory Latency Checker (Intel MLC)](https://www.intel.com/content/www/us/en/developer/articles/tool/intelr-memory-latency-checker.html)
+### [Intel Memory Latency Checker (Intel MLC)](https://www.intel.com/content/www/us/en/developer/articles/tool/intelr-memory-latency-checker.html)
 
 Usage:
 
@@ -157,7 +147,7 @@ Usage:
 mlc
 ```
 
-## [stressapptest (GSAT)](https://github.com/stressapptest/stressapptest)
+### [stressapptest (GSAT)](https://github.com/stressapptest/stressapptest)
 
 Usage:
 
@@ -165,7 +155,7 @@ Usage:
 stressapptest
 ```
 
-## [s-tui](https://github.com/amanusk/s-tui)
+### [s-tui](https://github.com/amanusk/s-tui)
 
 Usage:
 
@@ -173,10 +163,20 @@ Usage:
 s-tui
 ```
 
-## [FIRESTARTER](https://github.com/tud-zih-energy/FIRESTARTER)
+### [FIRESTARTER](https://github.com/tud-zih-energy/FIRESTARTER)
 
 Usage:
 
 ```bash
 FIRESTARTER
+```
+
+## Building
+
+The ``build.py`` script can be used to build the ISO. It is designed to run on [ubuntu-latest](https://docs.github.com/en/actions/using-workflows/workflow-syntax-for-github-actions#choosing-github-hosted-runners) for GitHub actions, but you can use a Linux distro of your choice.
+
+```bash
+git clone https://github.com/amitxv/StresKit.git
+cd StresKit/
+python build.py
 ```
