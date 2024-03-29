@@ -48,7 +48,7 @@ jobs:
       - name: Generate changelog
         id: generate-changelog
         run: |
-          response=$(curl -s "https://api.github.com/repos/amitxv/StresKit2/commits")
+          response=$(curl -s "https://api.github.com/repos/amitxv/StresKit/commits")
           commit_message=$(echo "$response" | jq -r '.[0].commit.message')
 
           if [ "${{ github.event_name }}" == "push" ]; then
