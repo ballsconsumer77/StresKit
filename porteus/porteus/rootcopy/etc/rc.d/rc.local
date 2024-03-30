@@ -1,4 +1,4 @@
 #!/bin/sh
 
-sudo "echo performance | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor"
-sudo "echo 1 | tee /sys/devices/system/cpu/cpufreq/boost"
+echo performance | tee /sys/devices/system/cpu/cpu*/cpufreq/scaling_governor
+echo 1 | tee /sys/devices/system/cpu/cpufreq/boost
