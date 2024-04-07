@@ -14,7 +14,7 @@ Lightweight bootable ISO based on [Porteus](https://www.porteus.org) containing 
 
 ## Usage
 
-- [Display StresKit Help Message](#display-streskit-help-message)
+- [Toggling Mitigations](#toggling-mitigations)
 - [Switch TTY](#switch-tty)
 - [Sensors](#sensors)
 - [Viewing Large Outputs](#viewing-large-outputs)
@@ -26,6 +26,10 @@ Lightweight bootable ISO based on [Porteus](https://www.porteus.org) containing 
 - [stressapptest (GSAT)](#stressapptest-gsat)
 - [s-tui](#s-tui)
 - [FIRESTARTER](#firestarter)
+
+### Toggling Mitigations
+
+By default, mitigations are disabled. To enable them, remove the line that disables mitigations in [porteus.cfg](/porteus/boot/syslinux/porteus.cfg) after mounting the ISO to a USB (or build a new ISO with the modified config). Enabling mitigations may provide a performance uplift for systems with a Ryzen CPU ([1](https://www.phoronix.com/review/amd-zen4-spectrev2)).
 
 ### Display StresKit Help Message
 
