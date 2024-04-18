@@ -1,8 +1,6 @@
 # StresKit
 
-[![Downloads](https://img.shields.io/github/downloads/amitxv/StresKit/total.svg)](https://github.com/amitxv/StresKit/releases)
-
-[![Buy Me A Coffee](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/amitxv)
+[![Downloads](https://img.shields.io/github/downloads/amitxv/StresKit/total.svg)](https://github.com/amitxv/StresKit/releases) [![Buy Me a Coffee](https://img.shields.io/badge/Buy%20Me%20a%20Coffee-Donate-orange?logo=buy-me-a-coffee)](https://www.buymeacoffee.com/amitxv)
 
 Lightweight bootable ISO based on [Porteus](https://www.porteus.org) containing a compendium of stress-testing related tools and utilities.
 
